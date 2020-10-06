@@ -14,7 +14,13 @@ def roll_die(dice, sides):
 
 class Character():
 
-    def __init__(self, default=10):
+    def __init__(self, default=0):
+        self.strength_mod = default
+        self.dexterity_mod = default
+        self.constitution_mod = default
+        self.intelligence_mod = default
+        self.wisdom_mod = default
+        self.charisma_mod = default
         self.strength = default
         self.dexterity = default
         self.constitution = default
@@ -32,7 +38,8 @@ class Character():
             'Charisma'
         ]
         self.classes = [
-            'Barbarian'
+            'Barbarian',
+            'Fighter'
         ]
     
     def show_attributes(self):
@@ -44,25 +51,74 @@ class Character():
         print(self.charisma)
         print(self.armorclass)
 
+    def show_modifiers(self):
+        print(self.strength_mod)
+        print(self.dexterity_mod)
+        print(self.constitution_mod)
+        print(self.intelligence_mod)
+        print(self.wisdom_mod)
+        print(self.charisma_mod)
+
+
     def set_attribute(self, attribute, value):
+        if value == 1:
+            modifier = -5
+        elif value == 2 or value == 3:
+            modifier = -4
+        elif value == 4 or value == 5:
+            modifier = -3
+        elif value == 6 or value == 7:
+            modifier = -2
+        elif value == 8 or value == 9:
+            modifier = -1
+        elif value == 10 or value == 11:
+            modifier = 0
+        elif value == 12 or value == 13:
+            modifier = 1
+        elif value == 14 or value == 15:
+            modifier = 2
+        elif value == 16 or value == 17:
+            modifier = 3
+        elif value == 18 or value == 19:
+            modifier = 4
+        elif value == 20 or value == 21:
+            modifier = 5
+        elif value == 22 or value == 23:
+            modifier = 6
+        elif value == 24 or value == 25:
+            modifier = 7
+        elif value == 26 or value == 27:
+            modifier = 8
+        elif value == 28 or value == 29:
+            modifier = 9
+        elif value == 30:
+            modifier = 10
+        else:
+            print('problem in set_attribute modifier if/else statement')
         if attribute == 'Strength':
             self.strength = value
-            return self.strength
+            self.strength_mod = modifier
+            return self.strength, self.strength_mod
         elif attribute == 'Dexterity':
             self.dexterity = value
-            return self.dexterity
+            self.dexterity_mod = modifier
+            return self.dexterity, self.dexterity_mod
         elif attribute == 'Constitution':
             self.constitution = value
-            return self.constitution
+            self.constitution_mod = modifier
+            return self.constitution, self.constitution_mod
         elif attribute == 'Intelligence':
             self.intelligence = value
-            return self.intelligence
+            self.intelligence_mod = modifier
+            return self.intelligence, self.intelligence_mod
         elif attribute == 'Wisdom':
             self.wisdom = value
-            return self.wisdom
+            self.wisdom_mod = modifier
+            return self.wisdom, self.wisdom_mod
         elif attribute == 'Charisma':
             self.charisma = value
-            return self.charisma
+            self.charisma_mod = modifier
+            return self.charisma, self.charisma_mod
         else:
             print('set attribute in character class whoops')
         
@@ -91,6 +147,14 @@ class Player(Character):
         print(self.charisma)
         print(self.armorclass)
 
+    def print_modifiers(self):
+        print(self.strength_mod)
+        print(self.dexterity_mod)
+        print(self.constitution_mod)
+        print(self.intelligence_mod)
+        print(self.wisdom_mod)
+        print(self.charisma_mod)
+
     def set_attributes(self):
         while (len(self.attribute_scores) > 0):
             for attribute_name in self.attributes:
@@ -110,6 +174,7 @@ class Player(Character):
                         not_valid = True
                 Character.set_attribute(self, attribute_name, get_value)
                 self.attribute_scores.pop(get_index)
+        
             
     def set_char_class(self):
         print(self.classes)
@@ -192,10 +257,12 @@ class Consumable(Item):
 # np = NonPlayer()
 # np.set_attributes()
 # np.print_attributes()
-p = Player()
-p.set_attributes()
-p.print_attributes()
-p.set_char_class()
+# p = Player()
+# p.set_attributes()
+# p.print_attributes()
+# p.set_char_class()
+# p.print_attributes()
+# p.print_modifiers()
 '''
 Set Up
 '''
