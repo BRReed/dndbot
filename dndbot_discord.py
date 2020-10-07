@@ -36,14 +36,20 @@ async def commands(ctx):
 
 @bot.command(name='dicegame')
 async def dice_game(ctx):
-    author = str(ctx.author.id)
     print('we made it to dice game function')
     await ctx.channel.send("type '1' to play against computer, '2' to wait for another player")
     choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author)    
-    if choice.content.lower() == 'a':
+    if choice.content.lower() == '1':
+        player = dndbot.roll_die(2, 6)
+        computer = dndbot.roll_die(2, 6)
         await ctx.channel.send("You want to play with the computer")
-        await ctx.channel.send(f"{dndbot.roll_die(2, 6)}")
-    elif choice.content.lower() == 'b':
+        await ctx.channel.send(f"you rolled {player}")
+        await ctx.channel.send(f"computer rolled {computer}")
+        if computer > player:
+            await ctx.channel.send("Computer Wins!")
+        elif player > computer:
+            await ctx.channel.send('Player Wins!')
+    elif choice.content.lower() == '2':
         await ctx.channel.send("You want to play against another player")
     
 
