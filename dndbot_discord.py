@@ -2,24 +2,25 @@ import discord
 from discord.ext import commands
 import dndbot
 
-bot_object = commands.Bot(command_prefix = '.')
+
+bot = commands.Bot(command_prefix = '.')
 
 
 
-@bot_object.event
+@bot.event
 async def on_ready():
     print('Bot is ready.')
 
-@bot_object.command(name='shutdown')
+@bot.command(name='shutdown')
 async def shutdown(message):
     if str(message.author.id) == '275827627502075905':
-        await bot_object.close()
+        await bot.close()
         print('bot closed')
     else:
         print('unauthorized user ' + str(message.author.id + ' is trying to close the bot'))
 
 
-@bot_object.command(name='commands')
+@bot.command(name='commands')
 async def commands(ctx):
     await ctx.send(
         """
@@ -33,17 +34,22 @@ async def commands(ctx):
 
     )
 
-@bot_object.command(name='dicegame')
-async def dice_game(message):
-    author = str(message.author.id)
+@bot.command(name='dicegame')
+async def dice_game(ctx):
+    author = str(ctx.author.id)
     print('we made it to dice game function')
-    await message.channel.send(f"type .1 to play against computer, .2 to wait for another player{author}"
-    )
+    await ctx.channel.send("type '1' to play against computer, '2' to wait for another player")
+    choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author)    
+    if choice.content.lower() == 'a':
+        await ctx.channel.send("You want to play with the computer")
+        await ctx.channel.send(f"{dndbot.roll_die(2, 6)}")
+    elif choice.content.lower() == 'b':
+        await ctx.channel.send("You want to play against another player")
     
 
+    
 
-
-@bot_object.command(name='autocreate')
+@bot.command(name='autocreate')
 async def create_character(ctx):
     np = dndbot.NonPlayer()
     np.set_attributes()
@@ -57,4 +63,4 @@ Wisdom: {np.wisdom}
 Charisma: {np.charisma}
                     ''')
 
-bot_object.run('NzU3MzM0MTY0OTE0NzAwMzc5.X2e4Zw.5IR2Kwdd35YIE55YUSTQfRFmj1c')
+bot.run('NzU3MzM0MTY0OTE0NzAwMzc5.X2e4Zw.5IR2Kwdd35YIE55YUSTQfRFmj1c')
