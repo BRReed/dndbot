@@ -51,6 +51,19 @@ async def dice_game(ctx):
             await ctx.channel.send('Player Wins!')
     elif choice.content.lower() == '2':
         await ctx.channel.send("You want to play against another player")
+        await ctx.channel.send(f"If you want to play against {ctx.author} type '1'")
+        player2 = await bot.wait_for('message', check=lambda message: message.author != ctx.author)
+        if player2.content.lower() == '1':
+            player_dice_total = dndbot.roll_die(2, 6)
+            player2_dice_total = dndbot.roll_die(2, 6)
+            await ctx.channel.send(f"{ctx.author} vs {player2.author}")
+            await ctx.channel.send(f"{ctx.author}'s total: {player_dice_total}")
+            await ctx.channel.send(f"{player2.author}'s total: {player2_dice_total}")
+            if player_dice_total > player2_dice_total:
+                await ctx.channel.send(f"{ctx.author} wins!")
+            elif player2_dice_total > player_dice_total:
+                await ctx.channel.send(f"{player2.author} wins!")
+
     
 
     
