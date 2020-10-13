@@ -213,7 +213,7 @@ class Player(Character):
 
 
 
-class NonPlayer(Character):
+class AutoSelectPlayer(Character):
 
     def __init__(self):
         Character.__init__(self)
