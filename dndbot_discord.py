@@ -2,6 +2,7 @@ import discord
 import asyncio
 from discord.ext import commands
 import dndbot
+import dndbot_token
 
 
 bot = commands.Bot(command_prefix = '.')
@@ -114,5 +115,5 @@ Press '1' to play against the computer or '2' to play against a friend.
 
     
 
+bot.run(dndbot_token.token)
 
-bot.run('NzU3MzM0MTY0OTE0NzAwMzc5.X2e4Zw.5IR2Kwdd35YIE55YUSTQfRFmj1c')
