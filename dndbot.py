@@ -42,8 +42,7 @@ class Character():
             'Fighter',
             'Monk',
             'Paladin',
-            'Rogue',
-
+            'Rogue'
         ]
     
     def show_attributes(self):
@@ -131,14 +130,15 @@ class Character():
 
     # takes a class, changes character attributes to match class    
     def set_char_class(self, char_class):
-        if char_class == 'Barbarian':
-            self.constitution == 15
-            self.strength == 14
-            self.dexterity == 13
-            self.charisma == 12
-            self.wisdom == 10
-            self.intelligence == 8
-        elif char_class == 'Paladin':
+        self.char_class = char_class
+        if self.char_class == 'Barbarian':
+            self.constitution = 15
+            self.strength = 14
+            self.dexterity = 13
+            self.charisma = 12
+            self.wisdom = 10
+            self.intelligence = 8
+        elif self.char_class == 'Paladin':
             self.strength == 15
             self.constitution == 14
             self.charisma == 13
@@ -214,7 +214,9 @@ class Player(Character):
                         not_valid = True
                 Character.set_attribute(self, attribute_name, get_value)
                 self.attribute_scores.pop(get_index)
-        
+    def set_char_class(self, char_class):
+        self.char
+        return Character.set_char_class(char_class)
 
 
     def set_hit_points(self):

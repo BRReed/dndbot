@@ -76,17 +76,45 @@ async def dice_game(ctx):
 
 @bot.command(name='autocreate')
 async def create_character(ctx):
-    np = dndbot.AutoSelectPlayer()
-    np.set_attributes()
-    np.print_attributes()
     await ctx.send(f'''
-Strength: {np.strength}
-Dexterity: {np.dexterity}
-Constitution: {np.constitution}
-Intelligence: {np.intelligence}
-Wisdom: {np.wisdom}
-Charisma: {np.charisma}
+Enter '1' for Barbarian
+Enter '2' for Fighter
+Enter '3' for Monk
+Enter '4' for Paladin
+Enter '5' for Rogue
+    
                     ''')
+    player_class_choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 20)
+    if player_class_choice.content.lower() == '1':
+        player1 = dndbot.Character()
+        player1.set_char_class('Barbarian')
+    elif player_class_choice.content.lower() == '2':
+        player1 = dndbot.Character()
+        player1.set_char_class('Fighter')
+    elif player_class_choice.content.lower() == '3':
+        player1 = dndbot.Character()
+        player1.set_char_class('Monk')
+    elif player_class_choice.content.lower() == '4':
+        player1 = dndbot.Character()
+        player1.set_char_class('Paladin')
+    elif player_class_choice.content.lower() == '5':
+        player1 = dndbot.Character()
+        player1.set_char_class('Rogue')
+    else:
+        print('Error in player_class_choice')
+
+    await ctx.send(f'''
+Strength: {player1.strength}
+Dexterity: {player1.dexterity}
+Constitution: {player1.constitution}
+Intelligence: {player1.intelligence}
+Wisdom: {player1.wisdom}
+Charisma: {player1.charisma}
+                    ''')
+
+
+
+    
 
 
 @bot.command(name='combat')
