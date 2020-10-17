@@ -39,7 +39,11 @@ class Character():
         ]
         self.classes = [
             'Barbarian',
-            'Fighter'
+            'Fighter',
+            'Monk',
+            'Paladin',
+            'Rogue',
+
         ]
     
     def show_attributes(self):
@@ -59,7 +63,9 @@ class Character():
         print(self.wisdom_mod)
         print(self.charisma_mod)
 
-
+    
+    # manually set attributes, possible use in the future currently not
+    # implemented
     def set_attribute(self, attribute, value):
         if value == 1:
             modifier = -5
@@ -121,15 +127,49 @@ class Character():
             return self.charisma, self.charisma_mod
         else:
             print('set attribute in character class whoops')
-        
-    def set_char_class(self, char_class):
-        self.char_class = char_class
-        print(f'youre a {self.char_class} harry')
-        
 
+
+    # takes a class, changes character attributes to match class    
+    def set_char_class(self, char_class):
+        if char_class == 'Barbarian':
+            self.constitution == 15
+            self.strength == 14
+            self.dexterity == 13
+            self.charisma == 12
+            self.wisdom == 10
+            self.intelligence == 8
+        elif char_class == 'Paladin':
+            self.strength == 15
+            self.constitution == 14
+            self.charisma == 13
+            self.dexterity == 12
+            self.wisdom == 10
+            self.intelligence == 8
+        elif char_class == 'Fighter':
+            self.strength == 15
+            self.constitution == 14
+            self.dexterity == 12
+            self.charisma == 13
+            self.wisdom == 10
+            self.intelligence == 8
+        elif char_class == 'Monk':
+            self.dexterity == 15
+            self.wisdom == 14
+            self.constitution == 13
+            self.charisma == 12
+            self.intelligence == 10
+            self.strength == 8
+        elif char_class == 'Rogue':
+            self.dexterity == 15
+            self.charisma == 14
+            self.strength == 13
+            self.constitution == 12
+            self.wisdom == 10
+            self.intelligence == 8
+        else:
+            print('Error in function set_char_class in class Character')
+            print(f'the passed value for char_class is: {char_class}')
         
-        
-    
 
 
 
@@ -175,23 +215,7 @@ class Player(Character):
                 Character.set_attribute(self, attribute_name, get_value)
                 self.attribute_scores.pop(get_index)
         
-            
-    def set_char_class(self):
-        print(self.classes)
-        print('Choose a class from the classes above')
-        no_class = True
-        while no_class:
-            try:
-                get_char_class = input('>')
-                if get_char_class in self.classes:
-                    no_class = False
-                    Character.set_char_class(self, get_char_class)
-                    
-                else:
-                    print('Sorry, that class isn\'t available '
-                          'please retype:')
-            except ValueError:
-                print('error getting class, please try again')
+
 
     def set_hit_points(self):
         pass
