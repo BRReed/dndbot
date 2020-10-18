@@ -63,8 +63,7 @@ class Character():
         print(self.charisma_mod)
 
     
-    # manually set attributes, possible use in the future currently not
-    # implemented
+    # manually set attributes, currently not in use
     def set_attribute(self, attribute, value):
         if value == 1:
             modifier = -5
@@ -145,21 +144,21 @@ class Character():
             self.dexterity == 12
             self.wisdom == 10
             self.intelligence == 8
-        elif char_class == 'Fighter':
+        elif self.char_class == 'Fighter':
             self.strength == 15
             self.constitution == 14
             self.dexterity == 12
             self.charisma == 13
             self.wisdom == 10
             self.intelligence == 8
-        elif char_class == 'Monk':
+        elif self.char_class == 'Monk':
             self.dexterity == 15
             self.wisdom == 14
             self.constitution == 13
             self.charisma == 12
             self.intelligence == 10
             self.strength == 8
-        elif char_class == 'Rogue':
+        elif self.char_class == 'Rogue':
             self.dexterity == 15
             self.charisma == 14
             self.strength == 13
@@ -169,6 +168,24 @@ class Character():
         else:
             print('Error in function set_char_class in class Character')
             print(f'the passed value for char_class is: {char_class}')
+    
+    # takes a race, changes character attributes based on race
+    def set_char_race(self, char_race):
+        self.char_race = char_race
+        if self.char_race == 'Dwarf':
+            self.constitution += 2
+        elif self.char_race == 'Elf':
+            self.dexterity += 2
+        elif self.char_race == 'Human':
+            self.strength += 1
+            self.constitution += 1
+            self.dexterity += 1
+            self.charisma += 1
+            self.wisdom += 1
+            self.intelligence += 1
+        
+        
+
         
 
 

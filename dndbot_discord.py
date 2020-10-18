@@ -77,41 +77,50 @@ async def dice_game(ctx):
 @bot.command(name='autocreate')
 async def create_character(ctx):
     await ctx.send(f'''
-Enter '1' for Barbarian
-Enter '2' for Fighter
-Enter '3' for Monk
-Enter '4' for Paladin
-Enter '5' for Rogue
+Enter '**1**' for **Barbarian**
+Enter '**2**' for **Fighter**
+Enter '**3**' for **Monk**
+Enter '**4**' for **Paladin**
+Enter '**5**' for **Rogue**
     
                     ''')
     player_class_choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 20)
+    player1 = dndbot.Character()
     if player_class_choice.content.lower() == '1':
-        player1 = dndbot.Character()
         player1.set_char_class('Barbarian')
     elif player_class_choice.content.lower() == '2':
-        player1 = dndbot.Character()
         player1.set_char_class('Fighter')
     elif player_class_choice.content.lower() == '3':
-        player1 = dndbot.Character()
         player1.set_char_class('Monk')
     elif player_class_choice.content.lower() == '4':
-        player1 = dndbot.Character()
         player1.set_char_class('Paladin')
     elif player_class_choice.content.lower() == '5':
-        player1 = dndbot.Character()
         player1.set_char_class('Rogue')
     else:
         print('Error in player_class_choice')
 
     await ctx.send(f'''
-Strength: {player1.strength}
-Dexterity: {player1.dexterity}
-Constitution: {player1.constitution}
-Intelligence: {player1.intelligence}
-Wisdom: {player1.wisdom}
-Charisma: {player1.charisma}
-                    ''')
+Enter '**1**' for **Dwarf**
+Enter '**2**' for **Elf**
+Enter '**3**' for **Human**
 
+                    ''')
+    player_race_choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 20)
+    if player_race_choice.content.lower() == '1':
+        player1.set_char_race('Dwarf')
+    elif player_race_choice.content.lower() == '2':
+        player1.set_char_race('Elf')
+    elif player_race_choice.content.lower() == '3':
+        player1.set_char_race('Human')
+    await ctx.send(f'''
+{player1.strength}
+{player1.constitution}
+{player1.dexterity}
+{player1.charisma}
+{player1.wisdom}
+{player1.intelligence}
+    
+    ''')
 
 
     
