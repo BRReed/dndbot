@@ -29,8 +29,7 @@ async def user_commands(ctx):
 .dicegame
 .commands - get a list of commands
 .create - begin a character
-.autocreate - auto create a character
-.customcreate - customize a character
+
         
         """
 
@@ -74,7 +73,7 @@ async def dice_game(ctx):
 
     
 
-@bot.command(name='autocreate')
+@bot.command(name='create')
 async def create_character(ctx):
     await ctx.send(f'''
 Enter '**1**' for **Barbarian**
@@ -105,6 +104,7 @@ Enter '**2**' for **Elf**
 Enter '**3**' for **Human**
 
                     ''')
+
     player_race_choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 20)
     if player_race_choice.content.lower() == '1':
         player1.set_char_race('Dwarf')
@@ -113,14 +113,28 @@ Enter '**3**' for **Human**
     elif player_race_choice.content.lower() == '3':
         player1.set_char_race('Human')
     await ctx.send(f'''
-{player1.strength}
-{player1.constitution}
-{player1.dexterity}
-{player1.charisma}
-{player1.wisdom}
-{player1.intelligence}
+**{ctx.author.name}** is a **{player1.char_race} {player1.char_class}**
+
+with proficiencies in: {player1.print_proficiencies}
+
+What weapon would you like to use:
+Enter '**1**' for **Battleaxe**
+Enter '**2**' for **Longsword**
+Enter '**3**' for **Warhammer**
+
+                    ''')
     
-    ''')
+    player_weapon_choice = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 20)
+    if player_weapon_choice.content.lower() == '1':
+        player1.set_char_weapon('Battleaxe')
+    elif player_weapon_choice.content.lower() == '2':
+        player1.set_char_weapon('Longsword')
+    elif player_weapon_choice.content.lower() == '3':
+        player1.set_char_weapon('Warhammer')
+    
+
+
+
 
 
     

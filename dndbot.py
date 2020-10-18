@@ -44,6 +44,15 @@ class Character():
             'Paladin',
             'Rogue'
         ]
+        self.resistances = [
+
+        ]
+        self.advantages = [
+
+        ]
+        self.proficiencies = [
+
+        ]
     
     def show_attributes(self):
         print(self.strength)
@@ -62,8 +71,16 @@ class Character():
         print(self.wisdom_mod)
         print(self.charisma_mod)
 
+    def show_proficiencies(self):
+        self.print_proficiencies = (f'')
+        for p in self.proficiencies:
+            self.print_proficiencies += f'\n**{p}**'
+
+        
+
+
     
-    # manually set attributes, currently not in use
+    # set attributes, currently not in use
     def set_attribute(self, attribute, value):
         if value == 1:
             modifier = -5
@@ -127,7 +144,7 @@ class Character():
             print('set attribute in character class whoops')
 
 
-    # takes a class, changes character attributes to match class    
+    # takes a characters class, changes character attributes to match class    
     def set_char_class(self, char_class):
         self.char_class = char_class
         if self.char_class == 'Barbarian':
@@ -169,13 +186,20 @@ class Character():
             print('Error in function set_char_class in class Character')
             print(f'the passed value for char_class is: {char_class}')
     
-    # takes a race, changes character attributes based on race
+    # takes a characters race, changes character attributes based on race
     def set_char_race(self, char_race):
         self.char_race = char_race
         if self.char_race == 'Dwarf':
             self.constitution += 2
+            self.resistances += 'Poison'
+            self.advantages += 'Poison'
+            self.proficiencies += ('Battleaxe', 'Handaxe',
+                                   'Light Hammer', 'Warhammer')
         elif self.char_race == 'Elf':
             self.dexterity += 2
+            self.resistances += 'Sleep'
+            self.advantages += 'Charmed'
+            self.proficiencies += ('**')
         elif self.char_race == 'Human':
             self.strength += 1
             self.constitution += 1
@@ -183,6 +207,23 @@ class Character():
             self.charisma += 1
             self.wisdom += 1
             self.intelligence += 1
+        self.show_proficiencies()
+
+    # takes a weapon and gives it to character, changes attributes based
+    # on character proficiencies of applicable
+    def set_char_weapon(self, weapon):
+        self.weapon = weapon
+        if self.weapon == 'Battleaxe':
+            pass
+        elif self.weapon == 'Longsword':
+            pass
+        elif self.weapon == 'Warhammer':
+            pass
+        
+        if self.weapon in self.proficiencies:
+            self.attack += 2
+        else:
+            pass
         
         
 
@@ -231,10 +272,6 @@ class Player(Character):
                         not_valid = True
                 Character.set_attribute(self, attribute_name, get_value)
                 self.attribute_scores.pop(get_index)
-    def set_char_class(self, char_class):
-        self.char
-        return Character.set_char_class(char_class)
-
 
     def set_hit_points(self):
         pass
