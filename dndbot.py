@@ -214,14 +214,18 @@ class Character():
     def set_char_weapon(self, weapon):
         self.weapon = weapon
         if self.weapon == 'Battleaxe':
-            pass
+            self.weapon_attack = 8
+            self.weapon_attack_type = 'Slashing'
         elif self.weapon == 'Longsword':
-            pass
+            self.weapon_attack = 8
+            self.weapon_attack_type = 'Slashing'
         elif self.weapon == 'Warhammer':
+            self.weapon_attack = 8
+            self.weapon_attack_type = 'Bludgeoning'
+        else:
             pass
-        
         if self.weapon in self.proficiencies:
-            self.attack += 2
+            self.weapon_attack += 2
         else:
             pass
         

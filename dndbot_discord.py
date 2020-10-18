@@ -131,6 +131,15 @@ Enter '**3**' for **Warhammer**
         player1.set_char_weapon('Longsword')
     elif player_weapon_choice.content.lower() == '3':
         player1.set_char_weapon('Warhammer')
+
+    await ctx.send(f'''
+Do you want to enter combat? 
+Enter '**1**' to fight against a **friend**
+Enter '**2**' to fight against the **computer**
+Enter '**3**' to **stop**
+    
+    ''')
+    
     
 
 
