@@ -71,6 +71,7 @@ class Character():
         print(self.wisdom_mod)
         print(self.charisma_mod)
 
+    # discord bot prints characters proficiencies
     def show_proficiencies(self):
         self.print_proficiencies = (f'')
         for p in self.proficiencies:
@@ -228,6 +229,27 @@ class Character():
             self.weapon_attack += 2
         else:
             pass
+
+    # takes a string and checks for illegal characters
+    # returns False if string contains illegal characters, True if it doesn't
+    def set_char_name(self, name):
+        self.name = name
+        lowered_name = self.name.lower()
+        if len(self.name) > 30:
+            return False
+        list_name = [c for c in lowered_name]
+        allowed_characters = ('a', 'b', 'c', 'd', 'e',
+        'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ')
+        for c in list_name:
+            if c not in allowed_characters:
+                self.name = ''
+                return False
+            else: 
+                continue
+        self.name = self.name.upper()
+        return True
+        
         
         
 
@@ -338,15 +360,8 @@ class Consumable(Item):
         Item.__init__(self, weight, name)
         self.uses = uses
 
-# np = NonPlayer()
-# np.set_attributes()
-# np.print_attributes()
-# p = Player()
-# p.set_attributes()
-# p.print_attributes()
-# p.set_char_class()
-# p.print_attributes()
-# p.print_modifiers()
+#np = Character()
+#print(np.set_char_name('Bjord Elfenstien*'))
 '''
 Set Up
 '''

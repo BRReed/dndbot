@@ -75,6 +75,7 @@ async def dice_game(ctx):
 @bot.command(name='load')
 async def load_character(ctx):
     pass
+
     
 # create a new character for dnd combat tied to user's discord ID
 @bot.command(name='create')
@@ -135,7 +136,27 @@ Enter '**3**' for **Warhammer**
         player1.set_char_weapon('Longsword')
     elif player_weapon_choice.content.lower() == '3':
         player1.set_char_weapon('Warhammer')
+    while True:
+        try:
+            await ctx.send(f'''
+**What is your character's name?**
+* No special characters
+* Shorter than 30 characters
+                ''')
+            characters_name = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 360)
 
+            if player1.set_char_name(characters_name.content.lower()) == False:
+                continue
+            elif player1.set_char_name(characters_name.content.lower()) == True:
+                break
+        except asyncio.TimeoutError:
+            await ctx.send('''You have timed out, please recreate your character''')
+            break
+            
+    await ctx.send(f'''
+**{player1.name}** the **{player1.char_class} {player1.char_race}** has been created
+
+    ''')
     await ctx.send(f'''
 Do you want to enter combat? 
 Enter '**1**' to fight against a **friend**
