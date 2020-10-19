@@ -21,20 +21,22 @@ async def shutdown(message):
     else:
         print('unauthorized user ' + str(message.author.id + ' is trying to close the bot'))
 
-
+# available commands in discord
 @bot.command(name='commands')
 async def user_commands(ctx):
     await ctx.send(
         """
-.dicegame
-.commands - get a list of commands
-.create - begin a character
+**.dicegame** - Whoever rolls higher wins
+**.commands** - Get a list of commands
+**.create** - Make a character
+**.load** - Load an already created character
 
         
         """
 
     )
 
+# simple dice game used to test different aspects of the discord api
 @bot.command(name='dicegame')
 async def dice_game(ctx):
     print('we made it to dice game function')
@@ -69,10 +71,12 @@ async def dice_game(ctx):
         except asyncio.TimeoutError:
             await ctx.channel.send('Sorry, no one wants to play with you!')
 
+# load a character that was already created by user's discord ID
+@bot.command(name='load')
+async def load_character(ctx):
+    pass
     
-
-    
-
+# create a new character for dnd combat tied to user's discord ID
 @bot.command(name='create')
 async def create_character(ctx):
     await ctx.send(f'''
@@ -139,20 +143,14 @@ Enter '**2**' to fight against the **computer**
 Enter '**3**' to **stop**
     
     ''')
-    
-    
-
-
-
-
+##^ need to connect to combat() once saving characters is implemented
 
     
 
-
+# combat against the computer or another discord user
 @bot.command(name='combat')
 async def combat(ctx):
-    player1 = dndbot.AutoSelectPlayer()
-    player1.set_attributes()
+
     await ctx.send(f'''
 {ctx.author.id} your attributes are:
 Strength: {player1.strength}
@@ -166,9 +164,9 @@ Press '1' to play against the computer or '2' to play against a friend.
     try:
         play_versus = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 20)
         if play_versus.content.lower() == '1':
-            await ctx.send('play vs comp')
+            await ctx.send('play vs comp placeholder message')
         elif play_versus == '2':
-            pass #play vs friend
+            await ctx.send('play vs friend placeholder message')
     except asyncio.TimeoutError:
         await ctx.send('Sorry, you took too long to respond')
 
