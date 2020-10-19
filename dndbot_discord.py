@@ -155,15 +155,13 @@ Enter '**3**' for **Warhammer**
             
     await ctx.send(f'''
 **{player1.name}** the **{player1.char_class} {player1.char_race}** has been created
+Enter '**1**' to save **{player1.name}**
+Enter '**2**' to delete **{player1.name}**
+    ''')
+    character_save = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 60)
+    if character_save.content.lower() == '1':
+        player1.save_char_info()
 
-    ''')
-    await ctx.send(f'''
-Do you want to enter combat? 
-Enter '**1**' to fight against a **friend**
-Enter '**2**' to fight against the **computer**
-Enter '**3**' to **stop**
-    
-    ''')
 ##^ need to connect to combat() once saving characters is implemented
 
     

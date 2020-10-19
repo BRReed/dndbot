@@ -1,4 +1,5 @@
 import random
+import json
 
 '''
 Objects
@@ -53,6 +54,9 @@ class Character():
         self.proficiencies = [
 
         ]
+        # Character.results[0] == wins
+        # Character.results[1] == losses
+        self.results = [0, 0]
     
     def show_attributes(self):
         print(self.strength)
@@ -192,8 +196,8 @@ class Character():
         self.char_race = char_race
         if self.char_race == 'Dwarf':
             self.constitution += 2
-            self.resistances += 'Poison'
-            self.advantages += 'Poison'
+            self.resistances.append('Poison')
+            self.advantages.append('Poison')
             self.proficiencies += ('Battleaxe', 'Handaxe',
                                    'Light Hammer', 'Warhammer')
         elif self.char_race == 'Elf':
@@ -249,6 +253,23 @@ class Character():
                 continue
         self.name = self.name.upper()
         return True
+
+    # takes information of a character turns it into a tuple
+    # and saves it to JSON file (json file needs to be created)
+    def save_char_info(self):
+        self.save = {
+            'name': self.name, 'class': self.char_class, 
+            'race': self.char_race, 'weapon': self.weapon, 
+            'attack': self.weapon_attack, 'strength': self.strength, 
+            'constitution': self.constitution, 'dexterity': self.dexterity,
+            'intelligence': self.intelligence, 'wisdom': self.wisdom,
+            'charisma': self.charisma, 'results': self.results, 
+            'attack_type': self.weapon_attack_type,
+            'resistance': self.resistances, 'armor_class': self.armorclass,
+            'proficiencies': self.proficiencies
+            }
+        with open('dndbot_saves.json', 'w') as f:
+            json.dump(self.save, f)
         
         
         
