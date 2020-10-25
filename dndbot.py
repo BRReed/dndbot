@@ -256,20 +256,72 @@ class Character():
 
     # takes information of a character turns it into a tuple
     # and saves it to JSON file (json file needs to be created)
-    def save_char_info(self):
-        self.save = {
-            'name': self.name, 'class': self.char_class, 
-            'race': self.char_race, 'weapon': self.weapon, 
-            'attack': self.weapon_attack, 'strength': self.strength, 
-            'constitution': self.constitution, 'dexterity': self.dexterity,
-            'intelligence': self.intelligence, 'wisdom': self.wisdom,
-            'charisma': self.charisma, 'results': self.results, 
-            'attack_type': self.weapon_attack_type,
-            'resistance': self.resistances, 'armor_class': self.armorclass,
-            'proficiencies': self.proficiencies
-            }
+    def save_char_info(self, userID):
+        
+        with open('dndbot_saves.json') as f:
+            data = json.load(f)
+        print(data)
+        data[f'{hash(userID)}'] = self.instance_as_dictionary()
+    
         with open('dndbot_saves.json', 'w') as f:
-            json.dump(self.save, f)
+            json.dump(data, f)
+        print(data)
+
+    def instance_as_dictionary(self):
+        dict_of_inst = {
+            'strength_mod': self.strength_mod, 'strength': self.strength,
+            'dexterity_mod': self.dexterity_mod, 'dexterity': self.dexterity,
+            'constitution_mod': self.constitution_mod,
+            'constitution': self.constitution, 
+            'intelligence_mod': self.intelligence_mod,
+            'intelligence': self.intelligence,
+            'wisdom_mod': self.wisdom_mod, 'wisdom': self.wisdom, 
+            'charisma_mod': self.charisma_mod, 'charisma': self.charisma,
+            'armorclass': self.armorclass, 'resistances': self.resistances,
+            'advantages': self.advantages, 'proficiencies': self.proficiencies,
+            'results': self.results, 'char_class': self.char_class,
+            'char_race': self.char_race, 'weapon': self.weapon,
+            'weapon_attack': self.weapon_attack,
+            'weapon_attack_type': self.weapon_attack_type, 'name': self.name
+        }
+        return dict_of_inst
+
+    def dictionary_as_instance(self, char_dict):
+        char_dict['strength_mod'] = self.strength_mod
+        char_dict['strength'] = self.strength
+        char_dict['dexterity_mod'] = self.dexterity
+        char_dict['dexterity'] = self.dexterity
+        char_dict['constitution_mod'] = self.constitution_mod
+        char_dict['constitution'] = self.constitution
+        char_dict['intelligence_mod'] = self.intelligence_mod
+        char_dict['intelligence'] = self.intelligence
+        char_dict['wisdom_mod'] = self.wisdom_mod
+        char_dict['wisdom'] = self.wisdom
+        char_dict['charisma_mod'] = self.charisma_mod
+        char_dict['charisma'] = self.charisma
+        char_dict['armorclass'] = self.armorclass
+        char_dict['resistances'] = self.resistances
+        char_dict['advantages'] = self.advantages
+        char_dict['proficiencies'] = self.proficiencies
+        char_dict['results'] = self.results
+        char_dict['char_class'] = self.char_class
+        char_dict['char_race'] = self.char_race
+        char_dict['weapon'] = self.weapon
+        char_dict['weapon_attack'] = self.weapon_attack
+        char_dict['weapon_attack_type'] = self.weapon_attack_type
+        char_dict['name'] = self.name
+
+
+
+    def load_char_info(self, userID):
+        with open('dndbot_saves.json') as f:
+            data = json.load(f)
+        character_dictionary = data[hash(userID)]
+        self.dictionary_as_instance(character_dictionary)
+        
+
+        
+        
         
         
         

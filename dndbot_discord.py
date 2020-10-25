@@ -160,7 +160,8 @@ Enter '**2**' to delete **{player1.name}**
     ''')
     character_save = await bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout = 60)
     if character_save.content.lower() == '1':
-        player1.save_char_info()
+        player1.save_char_info(ctx.author.id)
+    
 
 ##^ need to connect to combat() once saving characters is implemented
 
