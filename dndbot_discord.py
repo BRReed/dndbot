@@ -55,7 +55,8 @@ async def dice_game(ctx):
         elif player > computer:
             await ctx.channel.send('Player Wins!')
     elif choice.content.lower() == '2':
-        await ctx.channel.send("You want to play against another player")
+        await ctx.channel.send(
+            "You want to play against another player")
         await ctx.channel.send("If you want to play against"+
                               f" {ctx.author} type '1'")
         try:
@@ -65,7 +66,8 @@ async def dice_game(ctx):
             if player2.content.lower() == '1':
                 player_dice_total = dndbot.roll_die(2, 6)
                 player2_dice_total = dndbot.roll_die(2, 6)
-                await ctx.channel.send(f"{ctx.author} vs {player2.author}")
+                await ctx.channel.send(
+                    f"{ctx.author} vs {player2.author}")
                 await ctx.channel.send(f"{ctx.author}'s total:"+
                                        f" {player_dice_total}")
                 await ctx.channel.send(f"{player2.author}'s total:"
@@ -76,7 +78,9 @@ async def dice_game(ctx):
                     await ctx.channel.send(f"{player2.author} wins!")
 
         except asyncio.TimeoutError:
-            await ctx.channel.send('Sorry, no one wants to play with you!')
+            await ctx.channel.send('''
+Sorry, no one wants to play with you!
+''')
 
 # load a character that was already created by user's discord ID
 @bot.command(name='load')
@@ -96,7 +100,8 @@ Enter '**5**' for **Rogue**
     
                     ''')
     player_class_choice = await bot.wait_for('message', 
-            check=lambda message: message.author == ctx.author, timeout = 20)
+            check=lambda message: message.author == ctx.author, 
+            timeout = 20)
     player_create = dndbot.Character()
     if player_class_choice.content.lower() == '1':
         player_create.set_char_class('Barbarian')
@@ -119,7 +124,8 @@ Enter '**3**' for **Human**
                     ''')
 
     player_race_choice = await bot.wait_for('message', 
-            check=lambda message: message.author == ctx.author, timeout = 20)
+            check=lambda message: message.author == ctx.author, 
+            timeout = 20)
     if player_race_choice.content.lower() == '1':
         player_create.set_char_race('Dwarf')
     elif player_race_choice.content.lower() == '2':
@@ -140,7 +146,8 @@ Enter '**3**' for **Warhammer**
                     ''')
     
     player_weapon_choice = await bot.wait_for('message', 
-            check=lambda message: message.author == ctx.author, timeout = 20)
+            check=lambda message: message.author == ctx.author, 
+            timeout = 20)
     if player_weapon_choice.content.lower() == '1':
         player_create.set_char_weapon('Battleaxe')
     elif player_weapon_choice.content.lower() == '2':
@@ -158,9 +165,11 @@ Enter '**3**' for **Warhammer**
                 check=lambda message: message.author == ctx.author, 
                 timeout = 360)
 
-            if player_create.set_char_name(characters_name.content.lower()) == False:
+            if player_create.set_char_name(
+                characters_name.content.lower()) == False:
                 continue
-            elif player_create.set_char_name(characters_name.content.lower()) == True:
+            elif player_create.set_char_name(
+                characters_name.content.lower()) == True:
                 break
         except asyncio.TimeoutError:
             await ctx.send('''You have timed out,'''+
@@ -174,7 +183,8 @@ Enter '**1**' to save **{player_create.name}**
 Enter '**2**' to delete **{player_create.name}**
     ''')
     character_save = await bot.wait_for('message', 
-            check=lambda message: message.author == ctx.author, timeout = 60)
+            check=lambda message: message.author == ctx.author, 
+            timeout = 60)
     if character_save.content.lower() == '1':
         player_create.save_char_info(ctx.author.id)
         await ctx.send(f'''
@@ -192,7 +202,6 @@ To do so just enter '**.combat**'
 # combat against the computer or another discord user
 @bot.command(name='combat')
 async def combat(ctx):
-    print(ctx.author.id)
     char_check = dndbot.Character()
     if char_check.check_char_exists(ctx.author.id) == False:
         await ctx.send(f'''
@@ -203,22 +212,26 @@ Enter '**.create**' to start creating a character.
     player_one = dndbot.Character()
     player_one.load_char_info(ctx.author.id)
     await ctx.send(f'''
-{ctx.author.id} your attributes are:
-Strength: {player_one.strength}
-Dexterity: {player_one.dexterity}
-Constitution: {player_one.constitution}
-Intelligence: {player_one.intelligence}
-Wisdom: {player_one.wisdom}
-Charisma: {player_one.charisma}
-Press '1' to play against the computer or '2' to play against a friend.
+**{ctx.author.name}'s** character **{player_one.name}'s** attributes are:
+Strength: **{player_one.strength}**
+Dexterity: **{player_one.dexterity}**
+Constitution: **{player_one.constitution}**
+Intelligence: **{player_one.intelligence}**
+Wisdom: **{player_one.wisdom}**
+Charisma: **{player_one.charisma}**
+Enter '**1**' to play against the **computer**
+Enter '**2**' to play against a **friend**
                     ''')
     try:
         play_versus = await bot.wait_for('message', 
-            check=lambda message: message.author == ctx.author, timeout = 20)
+            check=lambda message: message.author == ctx.author, 
+            timeout = 20)
         if play_versus.content.lower() == '1':
             await ctx.send('play vs comp placeholder message')
         elif play_versus == '2':
             await ctx.send('play vs friend placeholder message')
+        else: 
+            await ctx.send('you must enter 1 or 2 placeholder message')
     except asyncio.TimeoutError:
         await ctx.send('Sorry, you took too long to respond')
 
