@@ -1,6 +1,7 @@
 import random
 import json
 
+
 '''
 Objects
 '''
@@ -81,7 +82,8 @@ class Character():
         for p in self.proficiencies:
             self.print_proficiencies += f'\n**{p}**'
 
-        
+    def __repr__(self):
+        return str(self.__dict__)
 
 
     
@@ -254,19 +256,18 @@ class Character():
         self.name = self.name.upper()
         return True
 
-    # takes information of a character turns it into a tuple
-    # and saves it to JSON file (json file needs to be created)
+    # takes current instance and saves to json file
     def save_char_info(self, userID):
-        
         with open('dndbot_saves.json') as f:
             data = json.load(f)
         print(data)
-        data[f'{hash(userID)}'] = self.instance_as_dictionary()
+        data[f'{userID}'] = self.instance_as_dictionary()
     
         with open('dndbot_saves.json', 'w') as f:
             json.dump(data, f)
         print(data)
 
+    # Takes current instance of character and returns as dictionary
     def instance_as_dictionary(self):
         dict_of_inst = {
             'strength_mod': self.strength_mod, 'strength': self.strength,
@@ -286,39 +287,49 @@ class Character():
         }
         return dict_of_inst
 
+    # takes a dictionary of a character and modifies current instance 
+    # to dictionary specifications
     def dictionary_as_instance(self, char_dict):
-        char_dict['strength_mod'] = self.strength_mod
-        char_dict['strength'] = self.strength
-        char_dict['dexterity_mod'] = self.dexterity
-        char_dict['dexterity'] = self.dexterity
-        char_dict['constitution_mod'] = self.constitution_mod
-        char_dict['constitution'] = self.constitution
-        char_dict['intelligence_mod'] = self.intelligence_mod
-        char_dict['intelligence'] = self.intelligence
-        char_dict['wisdom_mod'] = self.wisdom_mod
-        char_dict['wisdom'] = self.wisdom
-        char_dict['charisma_mod'] = self.charisma_mod
-        char_dict['charisma'] = self.charisma
-        char_dict['armorclass'] = self.armorclass
-        char_dict['resistances'] = self.resistances
-        char_dict['advantages'] = self.advantages
-        char_dict['proficiencies'] = self.proficiencies
-        char_dict['results'] = self.results
-        char_dict['char_class'] = self.char_class
-        char_dict['char_race'] = self.char_race
-        char_dict['weapon'] = self.weapon
-        char_dict['weapon_attack'] = self.weapon_attack
-        char_dict['weapon_attack_type'] = self.weapon_attack_type
-        char_dict['name'] = self.name
+        self.strength_mod = char_dict['strength_mod']
+        self.strength = char_dict['strength']
+        self.dexterity_mod = char_dict['dexterity_mod']
+        self.dexterity = char_dict['dexterity']
+        self.constitution_mod = char_dict['constitution_mod']
+        self.constitution = char_dict['constitution']
+        self.intelligence_mod = char_dict['intelligence_mod']
+        self.intelligence = char_dict['intelligence']
+        self.wisdom_mod = char_dict['wisdom_mod']
+        self.wisdom = char_dict['wisdom']
+        self.charisma_mod = char_dict['charisma_mod']
+        self.charisma = char_dict['charisma']
+        self.armorclass = char_dict['armorclass']
+        self.resistances = char_dict['resistances']
+        self.advantages = char_dict['advantages']
+        self.proficiencies = char_dict['proficiencies']
+        self.results = char_dict['results']
+        self.char_class = char_dict['char_class']
+        self.char_race = char_dict['char_race']
+        self.weapon = char_dict['weapon']
+        self.weapon_attack = char_dict['weapon_attack']
+        self.weapon_attack_type = char_dict['weapon_attack_type']
+        self.name = char_dict['name']
 
 
-
+    # access json file and loads character instance
     def load_char_info(self, userID):
         with open('dndbot_saves.json') as f:
             data = json.load(f)
-        character_dictionary = data[hash(userID)]
-        self.dictionary_as_instance(character_dictionary)
-        
+        character_dictionary = data[f'{userID}']
+        return self.dictionary_as_instance(character_dictionary)
+
+    # checks if the user's discord ID exists as a key
+    def check_char_exists(self, userID):
+        with open('dndbot_saves.json') as f:
+            data = json.load(f)
+        if str(userID) in data:
+            return True
+        else:
+            return False
 
         
         
