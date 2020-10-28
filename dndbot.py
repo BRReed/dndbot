@@ -81,72 +81,81 @@ class Character():
         self.print_proficiencies = (f'')
         for p in self.proficiencies:
             self.print_proficiencies += f'\n**{p}**'
-    
-    # set attributes, currently not in use
-    def set_attribute(self, attribute, value):
-        if value == 1:
-            modifier = -5
-        elif value == 2 or value == 3:
-            modifier = -4
-        elif value == 4 or value == 5:
-            modifier = -3
-        elif value == 6 or value == 7:
-            modifier = -2
-        elif value == 8 or value == 9:
-            modifier = -1
-        elif value == 10 or value == 11:
-            modifier = 0
-        elif value == 12 or value == 13:
-            modifier = 1
-        elif value == 14 or value == 15:
-            modifier = 2
-        elif value == 16 or value == 17:
-            modifier = 3
-        elif value == 18 or value == 19:
-            modifier = 4
-        elif value == 20 or value == 21:
-            modifier = 5
-        elif value == 22 or value == 23:
-            modifier = 6
-        elif value == 24 or value == 25:
-            modifier = 7
-        elif value == 26 or value == 27:
-            modifier = 8
-        elif value == 28 or value == 29:
-            modifier = 9
-        elif value == 30:
-            modifier = 10
-        else:
-            print('problem in set_attribute modifier if/else statement')
-        if attribute == 'Strength':
-            self.strength = value
-            self.strength_mod = modifier
-            return self.strength, self.strength_mod
-        elif attribute == 'Dexterity':
-            self.dexterity = value
-            self.dexterity_mod = modifier
-            return self.dexterity, self.dexterity_mod
-        elif attribute == 'Constitution':
-            self.constitution = value
-            self.constitution_mod = modifier
-            return self.constitution, self.constitution_mod
-        elif attribute == 'Intelligence':
-            self.intelligence = value
-            self.intelligence_mod = modifier
-            return self.intelligence, self.intelligence_mod
-        elif attribute == 'Wisdom':
-            self.wisdom = value
-            self.wisdom_mod = modifier
-            return self.wisdom, self.wisdom_mod
-        elif attribute == 'Charisma':
-            self.charisma = value
-            self.charisma_mod = modifier
-            return self.charisma, self.charisma_mod
-        else:
-            print('set attribute in character class whoops')
+
+    # takes a characters attributes and adjusts that attributes modifier
+    ## takes attribute, makes value = attribute, takes value assigns
+    ## modifier based on that, takes modifier and assigns attribute_mod
+    def set_attribute_modifier(self):
+        for attribute in self.attributes:
+            if attribute == 'Strength':
+                value = self.strength
+            elif attribute == 'Dexterity':
+                value = self.dexterity
+            elif attribute == 'Constitution':
+                value = self.constitution
+            elif attribute == 'Intelligence':
+                value = self.intelligence
+            elif attribute == 'Wisdom':
+                value = self.wisdom
+            elif attribute == 'Charisma':
+                value = self.charisma
+            else:
+                print(f'problem in set value '+
+                    f'attr = {attribute}; val = {value}')
+            if value == 1:
+                modifier = -5
+            elif value == 2 or value == 3:
+                modifier = -4
+            elif value == 4 or value == 5:
+                modifier = -3
+            elif value == 6 or value == 7:
+                modifier = -2
+            elif value == 8 or value == 9:
+                modifier = -1
+            elif value == 10 or value == 11:
+                modifier = 0
+            elif value == 12 or value == 13:
+                modifier = 1
+            elif value == 14 or value == 15:
+                modifier = 2
+            elif value == 16 or value == 17:
+                modifier = 3
+            elif value == 18 or value == 19:
+                modifier = 4
+            elif value == 20 or value == 21:
+                modifier = 5
+            elif value == 22 or value == 23:
+                modifier = 6
+            elif value == 24 or value == 25:
+                modifier = 7
+            elif value == 26 or value == 27:
+                modifier = 8
+            elif value == 28 or value == 29:
+                modifier = 9
+            elif value == 30:
+                modifier = 10
+            else:
+                print(f'problem in set modifier if/else statement '+
+                    f'attr = {attribute}; mod = {modifier}; val = {value}')
+            if attribute == 'Strength':
+                self.strength_mod = modifier
+            elif attribute == 'Dexterity':
+                self.dexterity_mod = modifier
+            elif attribute == 'Constitution':
+                self.constitution_mod = modifier
+            elif attribute == 'Intelligence':
+                self.intelligence_mod = modifier
+            elif attribute == 'Wisdom':
+                self.wisdom_mod = modifier
+            elif attribute == 'Charisma':
+                self.charisma_mod = modifier
+            else:
+                print(f'problem in set set attritube_mod = modifier '+
+                    f'attr = {attribute}; mod = {modifier}; val = {value}')
+            
 
 
-    # takes a characters class, changes character attributes to match class    
+    # takes a characters class, changes character attributes to match class
     def set_char_class(self, char_class):
         self.char_class = char_class
         if self.char_class == 'Barbarian':
@@ -157,33 +166,33 @@ class Character():
             self.wisdom = 10
             self.intelligence = 8
         elif self.char_class == 'Paladin':
-            self.strength == 15
-            self.constitution == 14
-            self.charisma == 13
-            self.dexterity == 12
-            self.wisdom == 10
-            self.intelligence == 8
+            self.strength = 15
+            self.constitution = 14
+            self.charisma = 13
+            self.dexterity = 12
+            self.wisdom = 10
+            self.intelligence = 8
         elif self.char_class == 'Fighter':
-            self.strength == 15
-            self.constitution == 14
-            self.dexterity == 12
-            self.charisma == 13
-            self.wisdom == 10
-            self.intelligence == 8
+            self.strength = 15
+            self.constitution = 14
+            self.dexterity = 12
+            self.charisma = 13
+            self.wisdom = 10
+            self.intelligence = 8
         elif self.char_class == 'Monk':
-            self.dexterity == 15
-            self.wisdom == 14
-            self.constitution == 13
-            self.charisma == 12
-            self.intelligence == 10
-            self.strength == 8
+            self.dexterity = 15
+            self.wisdom = 14
+            self.constitution = 13
+            self.charisma = 12
+            self.intelligence = 10
+            self.strength = 8
         elif self.char_class == 'Rogue':
-            self.dexterity == 15
-            self.charisma == 14
-            self.strength == 13
-            self.constitution == 12
-            self.wisdom == 10
-            self.intelligence == 8
+            self.dexterity = 15
+            self.charisma = 14
+            self.strength = 13
+            self.constitution = 12
+            self.wisdom = 10
+            self.intelligence = 8
         else:
             print('Error in function set_char_class in class Character')
             print(f'the passed value for char_class is: {char_class}')
@@ -209,7 +218,6 @@ class Character():
             self.charisma += 1
             self.wisdom += 1
             self.intelligence += 1
-        self.show_proficiencies()
 
     # takes a weapon and gives it to character, changes attributes based
     # on character proficiencies of applicable
@@ -255,12 +263,10 @@ class Character():
     def save_char_info(self, userID):
         with open('dndbot_saves.json') as f:
             data = json.load(f)
-        print(data)
         data[f'{userID}'] = self.instance_as_dictionary()
-    
         with open('dndbot_saves.json', 'w') as f:
             json.dump(data, f)
-        print(data)
+
 
     # Takes current instance of character and returns as dictionary
     def instance_as_dictionary(self):

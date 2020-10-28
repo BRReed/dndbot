@@ -97,8 +97,8 @@ Enter '**2**' for **Fighter**
 Enter '**3**' for **Monk**
 Enter '**4**' for **Paladin**
 Enter '**5**' for **Rogue**
-
                     ''')
+
     player_class_choice = await bot.wait_for('message',
             check=lambda message: message.author == ctx.author,
             timeout = 20)
@@ -115,12 +115,10 @@ Enter '**5**' for **Rogue**
         player_create.set_char_class('Rogue')
     else:
         print('Error in player_class_choice')
-
     await ctx.send(f'''
 Enter '**1**' for **Dwarf**
 Enter '**2**' for **Elf**
 Enter '**3**' for **Human**
-
                     ''')
 
     player_race_choice = await bot.wait_for('message',
@@ -132,6 +130,7 @@ Enter '**3**' for **Human**
         player_create.set_char_race('Elf')
     elif player_race_choice.content.lower() == '3':
         player_create.set_char_race('Human')
+    player_create.set_attribute_modifier()
     await ctx.send(f'''
 **{ctx.author.name}** has created a **{player_create.char_race} '''+
 f'''{player_create.char_class}**
@@ -142,7 +141,6 @@ What weapon would you like to use:
 Enter '**1**' for **Battleaxe**
 Enter '**2**' for **Longsword**
 Enter '**3**' for **Warhammer**
-
                     ''')
 
     player_weapon_choice = await bot.wait_for('message',
@@ -161,6 +159,7 @@ Enter '**3**' for **Warhammer**
 * No special characters
 * Shorter than 30 characters
                 ''')
+
             characters_name = await bot.wait_for('message',
                 check=lambda message: message.author == ctx.author,
                 timeout = 360)
@@ -182,6 +181,7 @@ f''' {player_create.char_race}** has been created
 Enter '**1**' to save **{player_create.name}**
 Enter '**2**' to delete **{player_create.name}**
     ''')
+
     character_save = await bot.wait_for('message',
             check=lambda message: message.author == ctx.author,
             timeout = 60)
@@ -191,13 +191,7 @@ Enter '**2**' to delete **{player_create.name}**
 **{player_create.name}** has been saved!
 You can now engage in combat against the computer or another player!
 To do so just enter '**.combat**'
-
         ''')
-
-
-
-
-
 
 # combat against the computer or another discord user
 @bot.command(name='combat')
@@ -209,6 +203,7 @@ Before you can enter combat you must create a character.
 Enter '**.create**' to start creating a character.
         ''')
         return
+
     player.load_char_info(ctx.author.id)
     await ctx.send(f'''
 **{ctx.author.name}'s** character **{player.name}'s** attributes are:
@@ -220,7 +215,8 @@ Wisdom: **{player.wisdom}**
 Charisma: **{player.charisma}**
 Enter '**1**' to play against the **computer**
 Enter '**2**' to play against a **friend**
-                    ''')
+        ''')
+
     try:
         play_versus = await bot.wait_for('message',
             check=lambda message: message.author == ctx.author,
@@ -235,7 +231,7 @@ Enter '**2**' to play against a **friend**
     except asyncio.TimeoutError:
         await ctx.send('Sorry, you took too long to respond')
 
-
+# Player vs Player combat
 async def combat_PvP(ctx, player_one):
     await ctx.send(f'''
 Enter '**1**' to fight against **{ctx.author.name}'s**
@@ -266,7 +262,7 @@ no one wanted to fight them.
 
 
 
-
+# Player vs NPC combat
 async def combat_PvNPC(ctx):
     pass
 
