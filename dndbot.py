@@ -81,11 +81,6 @@ class Character():
         self.print_proficiencies = (f'')
         for p in self.proficiencies:
             self.print_proficiencies += f'\n**{p}**'
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-
     
     # set attributes, currently not in use
     def set_attribute(self, attribute, value):
@@ -331,13 +326,6 @@ class Character():
         else:
             return False
 
-        
-        
-        
-        
-        
-
-        
 
 
 
