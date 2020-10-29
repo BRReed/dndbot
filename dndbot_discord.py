@@ -258,6 +258,20 @@ Enter '**.create**' to start creating a character.
 Sorry, **{player_one.name}** is too scary, 
 no one wanted to fight them.
     ''')
+    
+    initiative, player_one_initiative, player_two_initiative = dndbot.combat_initiative(ctx.author.id, opponent.author.id)
+    if initiative is True:
+        pass # first = player_one, second = player_two
+    elif initiative is False:
+        pass # first = player_two, second = player_one
+    await ctx.send(f'''
+**{player_one.name}** initiative roll: **{player_one_initiative}**
+**{player_two.name}** initiative roll: **{player_two_initiative}**
+
+
+
+
+''')
 
 
 
@@ -268,4 +282,3 @@ async def combat_PvNPC(ctx):
 
 
 bot.run(dndbot_token.token)
-

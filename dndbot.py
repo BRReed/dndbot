@@ -13,6 +13,25 @@ def roll_die(dice, sides):
 
     return total
 
+def combat_initiative(player_one, player_two):
+    try:
+        player_one_initiative = roll_die(1, 20)
+        player_two_initiative = roll_die(1, 20)
+        player_one_initiative != player_two_initiative
+    finally:
+        if player_one_initiative > player_two_initiative:
+            p1 = True
+            return p1, player_one_initiative, player_two_initiative
+        elif player_one_initiative < player_two_initiative:
+            p1 = False
+            return p1, player_one_initiative, player_two_initiative
+        else:
+            print(f'problem in combat_initiative '+
+                  f'p1 = {player_one}; p2 = {player_two} '+
+                  f'p1 roll = {player_one_initiative}; '+
+                  f'p2 roll = {player_two_initiative}')
+
+
 
 class Character():
 
@@ -152,7 +171,7 @@ class Character():
             else:
                 print(f'problem in set set attritube_mod = modifier '+
                     f'attr = {attribute}; mod = {modifier}; val = {value}')
-            
+        self.armorclass = (10 + self.dexterity_mod)
 
 
     # takes a characters class, changes character attributes to match class
@@ -204,12 +223,12 @@ class Character():
             self.constitution += 2
             self.resistances.append('Poison')
             self.advantages.append('Poison')
-            self.proficiencies += ('Battleaxe', 'Handaxe',
+            self.proficiencies.append('Battleaxe', 'Handaxe',
                                    'Light Hammer', 'Warhammer')
         elif self.char_race == 'Elf':
             self.dexterity += 2
-            self.resistances += 'Sleep'
-            self.advantages += 'Charmed'
+            self.resistances.append('Sleep')
+            self.advantages.append('Charmed')
             self.proficiencies += ('**')
         elif self.char_race == 'Human':
             self.strength += 1
