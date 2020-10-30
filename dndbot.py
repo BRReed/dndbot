@@ -31,6 +31,12 @@ def combat_initiative(player_one, player_two):
                   f'p1 roll = {player_one_initiative}; '+
                   f'p2 roll = {player_two_initiative}')
 
+# takes the current active player instance, and the other instances in
+# turn order and allows active player to perform actions to themselves
+# or other alive players
+def combat(active_player, turn_order):
+    pass # return action
+
 
 
 class Character():
@@ -221,14 +227,14 @@ class Character():
         self.char_race = char_race
         if self.char_race == 'Dwarf':
             self.constitution += 2
-            self.resistances.append('Poison')
-            self.advantages.append('Poison')
-            self.proficiencies.append('Battleaxe', 'Handaxe',
+            self.resistances += ('Poison')
+            self.advantages += ('Poison')
+            self.proficiencies += ('Battleaxe', 'Handaxe',
                                    'Light Hammer', 'Warhammer')
         elif self.char_race == 'Elf':
             self.dexterity += 2
-            self.resistances.append('Sleep')
-            self.advantages.append('Charmed')
+            self.resistances += ('Sleep')
+            self.advantages += ('Charmed')
             self.proficiencies += ('**')
         elif self.char_race == 'Human':
             self.strength += 1

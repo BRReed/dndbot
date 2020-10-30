@@ -131,6 +131,7 @@ Enter '**3**' for **Human**
     elif player_race_choice.content.lower() == '3':
         player_create.set_char_race('Human')
     player_create.set_attribute_modifier()
+    player_create.show_proficiencies()
     await ctx.send(f'''
 **{ctx.author.name}** has created a **{player_create.char_race} '''+
 f'''{player_create.char_class}**
@@ -261,17 +262,15 @@ no one wanted to fight them.
     
     initiative, player_one_initiative, player_two_initiative = dndbot.combat_initiative(ctx.author.id, opponent.author.id)
     if initiative is True:
-        pass # first = player_one, second = player_two
+        turn_order = [player_one, player_two]
     elif initiative is False:
-        pass # first = player_two, second = player_one
+        turn_order = [player_two, player_one]
     await ctx.send(f'''
 **{player_one.name}** initiative roll: **{player_one_initiative}**
 **{player_two.name}** initiative roll: **{player_two_initiative}**
-
-
-
-
+**{turn_order[0].name}** goes first
 ''')
+
 
 
 
