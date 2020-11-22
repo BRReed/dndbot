@@ -39,6 +39,7 @@ def combat(active_player, passive_player):
     if attack_roll >= passive_player.armorclass:
         damage_roll = roll_die(1, active_player.weapon_attack)
         passive_player.hit_points -= damage_roll
+        return damage_roll
     else:
         pass
 
@@ -302,13 +303,14 @@ class Character():
     def save_char_info(self, userID):
         with open('dndbot_saves.json') as f:
             data = json.load(f)
-        data[f'{userID}'] = self.instance_as_dictionary()
+        data[f'{userID}'] = self.instance_as_dictionary(userID)
         with open('dndbot_saves.json', 'w') as f:
             json.dump(data, f)
 
 
     # Takes current instance of character and returns as dictionary
-    def instance_as_dictionary(self):
+    def instance_as_dictionary(self, userID):
+        self.userID = userID
         dict_of_inst = {
             'strength_mod': self.strength_mod, 'strength': self.strength,
             'dexterity_mod': self.dexterity_mod, 'dexterity': self.dexterity,
@@ -324,7 +326,8 @@ class Character():
             'char_race': self.char_race, 'weapon': self.weapon,
             'weapon_attack': self.weapon_attack,
             'weapon_attack_type': self.weapon_attack_type, 'name': self.name,
-            'hit_die': self.hit_die, 'hit_points': self.hit_points
+            'hit_die': self.hit_die, 'hit_points': self.hit_points,
+            'userID': self.userID
         }
         return dict_of_inst
 
@@ -356,6 +359,7 @@ class Character():
         self.name = char_dict['name']
         self.hit_die = char_dict['hit_die']
         self.hit_points = char_dict['hit_points']
+        self.userID = char_dict['userID']
 
 
     # access json file and loads character instance

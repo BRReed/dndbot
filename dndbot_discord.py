@@ -281,16 +281,36 @@ Enter '2' to run
 ''')
 
         player_action = await bot.wait_for('message',
-            check=lambda message: message.author == ctx.author)
+            check=lambda message: message.author.id == turn_order[a_player].userID)
         if player_action.content.lower() == '1':
-            dndbot.combat(turn_order[a_player], turn_order[p_player])
+            damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
             await ctx.send(f'''
-placehold this
+**{turn_order[a_player].name}** hit **{turn_order[p_player].name}** for {damage_roll}
+{turn_order[p_player].name}'s HP is now {turn_order[p_player].hit_points}
 ''')
-    
 
-    # for player in turn_order:
-    #     dndbot.combat(player, turn_order)
+        if player_one.hit_points <= 0:
+            await ctx.send(f'''
+**{player_one.name}** has fallen in combat
+**{player_two.name}** is victorious!
+''')
+            break
+        elif player_two.hit_points <= 0:
+            await ctx.send(f'''
+**{player_two.name}** has fallen in combat
+**{player_one.name}** is victorious!
+''')
+            break
+        else:
+            pass
+        if a_player + 1 < len(turn_order):
+            a_player += 1
+        else:
+            a_player = 0
+        if p_player + 1 < len(turn_order):
+            p_player += 1
+        else:
+            p_player = 0
 
 
 
