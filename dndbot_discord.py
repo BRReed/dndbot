@@ -30,11 +30,12 @@ async def user_commands(ctx):
 **.dicegame** - Whoever rolls higher wins
 **.commands** - Get a list of commands
 **.create** - Make a character
-**.load** - Load an already created character
+**.wins** - Show the wins and losses of your character
 
 
         """
     )
+
 
 # simple dice game used to test different aspects of the discord api
 @bot.command(name='dicegame')
@@ -82,12 +83,22 @@ async def dice_game(ctx):
 Sorry, no one wants to play with you!
 ''')
 
-# load a character that was already created by user's discord ID
-#obsolete, characters automatically loaded when other relevant
-# functions are called
-@bot.command(name='load')
-async def load_character(ctx):
-    pass
+@bot.command(name='wins')
+async def character_wins(ctx):
+    p = dndbot.Character()
+    if p.check_char_exists(ctx.author.id) == False:
+        await ctx.send(f'''
+Before you can check your win/loss ratio you must create a character.
+Enter '**.create**' to start creating a character.
+        ''')
+        return
+    elif p.check_char_exists(ctx.author.id) == True:
+        p.load_char_info(ctx.author.id)
+        await ctx.send(f'''
+**{p.name}**'s wins: **{p.results[0]}**
+**{p.name}**'s losses: **{p.results[1]}**
+        ''')
+        return
 
 # create a new character for dnd combat tied to user's discord ID
 @bot.command(name='create')
@@ -270,10 +281,10 @@ no one wanted to fight them.
 **{player_one.name}** initiative roll: **{player_one_initiative}**
 **{player_two.name}** initiative roll: **{player_two_initiative}**
 ''')
+
     a_player = 0
     p_player = 1
     while True:
-        
         await ctx.send(f'''
 **{turn_order[a_player].name}** 
 Enter '1' to attack **{turn_order[p_player].name}**
@@ -283,23 +294,38 @@ Enter '2' to run
         player_action = await bot.wait_for('message',
             check=lambda message: message.author.id == turn_order[a_player].userID)
         if player_action.content.lower() == '1':
-            damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
-            await ctx.send(f'''
+            attack_roll, damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
+            if attack_roll >= turn_order[p_player].armorclass:
+                await ctx.send(f'''
 **{turn_order[a_player].name}** hit **{turn_order[p_player].name}** for {damage_roll}
 {turn_order[p_player].name}'s HP is now {turn_order[p_player].hit_points}
 ''')
-
+            elif attack_roll < turn_order[p_player].armorclass:
+                await ctx.send(f'''
+**{turn_order[a_player].name}** swings and misses **{turn_order[p_player].name}**
+''')
+            else:
+                print(f'error in attack roll / armor class evaluation dndbot_discord'
+                f'armor class: {turn_order[p_player].armorclass} attack roll: {attack_roll}')
         if player_one.hit_points <= 0:
             await ctx.send(f'''
 **{player_one.name}** has fallen in combat
 **{player_two.name}** is victorious!
 ''')
+            player_one.results[1] += 1
+            player_two.results[0] += 1
+            player_one.save_char_info(player_one.userID)
+            player_two.save_char_info(player_two.userID)
             break
         elif player_two.hit_points <= 0:
             await ctx.send(f'''
 **{player_two.name}** has fallen in combat
 **{player_one.name}** is victorious!
 ''')
+            player_one.results[0] += 1
+            player_two.results[1] += 1
+            player_one.save_char_info(player_one.userID)
+            player_two.save_char_info(player_two.userID)
             break
         else:
             pass

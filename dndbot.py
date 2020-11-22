@@ -39,9 +39,10 @@ def combat(active_player, passive_player):
     if attack_roll >= passive_player.armorclass:
         damage_roll = roll_die(1, active_player.weapon_attack)
         passive_player.hit_points -= damage_roll
-        return damage_roll
+        return attack_roll, damage_roll
     else:
-        pass
+        damage_roll = 0
+        return attack_roll, damage_roll
 
 
 
@@ -301,6 +302,7 @@ class Character():
 
     # takes current instance and saves to json file
     def save_char_info(self, userID):
+        self.hit_points = self.constitution_mod + self.hit_die
         with open('dndbot_saves.json') as f:
             data = json.load(f)
         data[f'{userID}'] = self.instance_as_dictionary(userID)
