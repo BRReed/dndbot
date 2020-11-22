@@ -34,8 +34,16 @@ def combat_initiative(player_one, player_two):
 # takes the current active player instance, and the other instances in
 # turn order and allows active player to perform actions to themselves
 # or other alive players
-def combat(active_player, turn_order):
-    pass # return action
+def combat(active_player, passive_player):
+    attack_roll = roll_die(1, 20)
+    if attack_roll >= passive_player.armorclass:
+        damage_roll = roll_die(1, active_player.weapon_attack)
+        passive_player.hit_points -= damage_roll
+    else:
+        pass
+
+
+
 
 
 
@@ -178,6 +186,7 @@ class Character():
                 print(f'problem in set set attritube_mod = modifier '+
                     f'attr = {attribute}; mod = {modifier}; val = {value}')
         self.armorclass = (10 + self.dexterity_mod)
+        self.hit_points = (self.hit_die + self.constitution_mod)
 
 
     # takes a characters class, changes character attributes to match class
@@ -190,6 +199,7 @@ class Character():
             self.charisma = 12
             self.wisdom = 10
             self.intelligence = 8
+            self.hit_die = 12
         elif self.char_class == 'Paladin':
             self.strength = 15
             self.constitution = 14
@@ -197,6 +207,7 @@ class Character():
             self.dexterity = 12
             self.wisdom = 10
             self.intelligence = 8
+            self.hit_die = 10
         elif self.char_class == 'Fighter':
             self.strength = 15
             self.constitution = 14
@@ -204,6 +215,7 @@ class Character():
             self.charisma = 13
             self.wisdom = 10
             self.intelligence = 8
+            self.hit_die = 10
         elif self.char_class == 'Monk':
             self.dexterity = 15
             self.wisdom = 14
@@ -211,6 +223,7 @@ class Character():
             self.charisma = 12
             self.intelligence = 10
             self.strength = 8
+            self.hit_die = 8
         elif self.char_class == 'Rogue':
             self.dexterity = 15
             self.charisma = 14
@@ -218,6 +231,7 @@ class Character():
             self.constitution = 12
             self.wisdom = 10
             self.intelligence = 8
+            self.hit_die = 8
         else:
             print('Error in function set_char_class in class Character')
             print(f'the passed value for char_class is: {char_class}')
@@ -309,7 +323,8 @@ class Character():
             'results': self.results, 'char_class': self.char_class,
             'char_race': self.char_race, 'weapon': self.weapon,
             'weapon_attack': self.weapon_attack,
-            'weapon_attack_type': self.weapon_attack_type, 'name': self.name
+            'weapon_attack_type': self.weapon_attack_type, 'name': self.name,
+            'hit_die': self.hit_die, 'hit_points': self.hit_points
         }
         return dict_of_inst
 
@@ -339,6 +354,8 @@ class Character():
         self.weapon_attack = char_dict['weapon_attack']
         self.weapon_attack_type = char_dict['weapon_attack_type']
         self.name = char_dict['name']
+        self.hit_die = char_dict['hit_die']
+        self.hit_points = char_dict['hit_points']
 
 
     # access json file and loads character instance
@@ -358,113 +375,6 @@ class Character():
             return False
 
 
-
-
-class Player(Character):
-
-    def __init__(self):
-        Character.__init__(self)
-
-    def print_attributes(self):
-        print(self.strength)
-        print(self.dexterity)
-        print(self.constitution)
-        print(self.intelligence)
-        print(self.wisdom)
-        print(self.charisma)
-        print(self.armorclass)
-
-    def print_modifiers(self):
-        print(self.strength_mod)
-        print(self.dexterity_mod)
-        print(self.constitution_mod)
-        print(self.intelligence_mod)
-        print(self.wisdom_mod)
-        print(self.charisma_mod)
-
-    def set_attributes(self):
-        while (len(self.attribute_scores) > 0):
-            for attribute_name in self.attributes:
-                print(self.attribute_scores)
-                print('From the scores above ' +
-                      'choose which you would like to set for ' +
-                      f'{attribute_name}')
-                not_valid = True
-                while not_valid:
-                    try:
-                        get_value = int(input('>'))
-                        get_index = self.attribute_scores.index(get_value)
-                        not_valid = False
-                    except ValueError:
-                        print('Enter a value on the list')
-                        print(self.attribute_scores)
-                        not_valid = True
-                Character.set_attribute(self, attribute_name, get_value)
-                self.attribute_scores.pop(get_index)
-
-    def set_hit_points(self):
-        pass
-    
-    def set_proficiencies(self):
-        pass
-
-    def set_equipment(self):
-        pass
-
-    def set_abilities(self):
-        pass
-
-    def set_attacks(self):
-        pass
-
-    def set_spells(self):
-        pass
-
-
-
-class AutoSelectPlayer(Character):
-
-    def __init__(self):
-        Character.__init__(self)
-
-    def set_attributes(self):
-
-        for attribute_name in self.attributes:
-            value = random.choice(self.attribute_scores)
-            index = self.attribute_scores.index(value)
-            Character.set_attribute(self, attribute_name, value)
-            self.attribute_scores.pop(index)
-    
-    def print_attributes(self):
-        print(self.strength)
-        print(self.dexterity)
-        print(self.constitution)
-        print(self.intelligence)
-        print(self.wisdom)
-        print(self.charisma)
-        print(self.armorclass)
-
-    def set_npc_class(self):
-        pass
-
-
-class Item():
-    def __init__(self, weight, name):
-        self.weight = weight
-        self.name = name
-
-class Weapon(Item):
-    def __init__(self, weight, name, damage):
-        Item.__init__(self, weight, name)
-        self.damage = damage
-
-class Consumable(Item):
-    def __init__(self, weight, name, uses):
-        Item.__init__(self, weight, name)
-        self.uses = uses
-
-#np = Character()
-#print(np.set_char_name('Bjord Elfenstien*'))
 '''
 Set Up
 '''

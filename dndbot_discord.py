@@ -83,10 +83,11 @@ Sorry, no one wants to play with you!
 ''')
 
 # load a character that was already created by user's discord ID
+#obsolete, characters automatically loaded when other relevant
+# functions are called
 @bot.command(name='load')
 async def load_character(ctx):
     pass
-
 
 # create a new character for dnd combat tied to user's discord ID
 @bot.command(name='create')
@@ -259,7 +260,7 @@ Enter '**.create**' to start creating a character.
 Sorry, **{player_one.name}** is too scary, 
 no one wanted to fight them.
     ''')
-    
+
     initiative, player_one_initiative, player_two_initiative = dndbot.combat_initiative(ctx.author.id, opponent.author.id)
     if initiative is True:
         turn_order = [player_one, player_two]
@@ -268,8 +269,28 @@ no one wanted to fight them.
     await ctx.send(f'''
 **{player_one.name}** initiative roll: **{player_one_initiative}**
 **{player_two.name}** initiative roll: **{player_two_initiative}**
-**{turn_order[0].name}** goes first
 ''')
+    a_player = 0
+    p_player = 1
+    while True:
+        
+        await ctx.send(f'''
+**{turn_order[a_player].name}** 
+Enter '1' to attack **{turn_order[p_player].name}**
+Enter '2' to run
+''')
+
+        player_action = await bot.wait_for('message',
+            check=lambda message: message.author == ctx.author)
+        if player_action.content.lower() == '1':
+            dndbot.combat(turn_order[a_player], turn_order[p_player])
+            await ctx.send(f'''
+placehold this
+''')
+    
+
+    # for player in turn_order:
+    #     dndbot.combat(player, turn_order)
 
 
 
