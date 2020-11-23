@@ -81,6 +81,11 @@ class Character():
             'Paladin',
             'Rogue'
         ]
+        self.races = [
+            'Dwarf',
+            'Elf',
+            'Human',
+        ]
         self.resistances = [
 
         ]
@@ -259,6 +264,7 @@ class Character():
             self.charisma += 1
             self.wisdom += 1
             self.intelligence += 1
+        self.hit_points = self.constitution_mod + self.hit_die
 
     # takes a weapon and gives it to character, changes attributes based
     # on character proficiencies of applicable
@@ -302,7 +308,6 @@ class Character():
 
     # takes current instance and saves to json file
     def save_char_info(self, userID):
-        self.hit_points = self.constitution_mod + self.hit_die
         with open('dndbot_saves.json') as f:
             data = json.load(f)
         data[f'{userID}'] = self.instance_as_dictionary(userID)
@@ -379,6 +384,11 @@ class Character():
             return True
         else:
             return False
+
+    def comp_create_char(self):
+        self.set_char_class(self.classes[random.randint(0, len(self.classes - 1))])
+        self.set_char_race(self.races[random.randint(0, len(self.races - 1))])
+        self.name = 'TEMPBOT'
 
 
 '''

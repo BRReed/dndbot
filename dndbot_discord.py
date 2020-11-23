@@ -236,6 +236,7 @@ Enter '**2**' to play against a **friend**
             timeout = 20)
         if play_versus.content.lower() == '1':
             await ctx.send('play vs comp placeholder message')
+            await combat_PvNPC(ctx)
         elif play_versus.content.lower() == '2':
             await ctx.send('play vs friend placeholder message')
             await combat_PvP(ctx, player)
@@ -344,7 +345,15 @@ Enter '2' to run
 
 # Player vs NPC combat
 async def combat_PvNPC(ctx):
-    pass
+    npc = dndbot.Character()
+    npc.comp_create_char()
+
+
+
+
+
+
+
 
 
 bot.run(dndbot_token.token)
