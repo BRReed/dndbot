@@ -348,8 +348,9 @@ async def combat_PvNPC(ctx, player_one):
     npc = dndbot.Character()
     npc.comp_create_char()
     npc.set_attribute_modifier()
-    print(npc.instance_as_dictionary('555'))
-    initiative, player_one_initiative, npc_initiative = dndbot.combat_initiative(ctx.author.id, 'npc')
+    npc.save_char_info('757334164914700379')
+    print(npc.instance_as_dictionary('757334164914700379'))
+    initiative, player_one_initiative, npc_initiative = dndbot.combat_initiative(ctx.author.id, '757334164914700379')
     ####
     if initiative is True:
         turn_order = [player_one, npc]
@@ -368,23 +369,31 @@ async def combat_PvNPC(ctx, player_one):
 Enter '1' to attack **{turn_order[p_player].name}**
 Enter '2' to run
 ''')
-
-        player_action = await bot.wait_for('message',
-            check=lambda message: message.author.id == turn_order[a_player].userID)
-        if player_action.content.lower() == '1':
+        if turn_order[a_player].bot == True:
+            print('GOT PASSED BOT TRUE CHECK')
+            await asyncio.sleep(5)
+            print('5 second wait')
             attack_roll, damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
-            if attack_roll >= turn_order[p_player].armorclass:
-                await ctx.send(f'''
+            await ctx.send(f'{attack_roll}, {damage_roll}')
+        else:
+            pass
+        if turn_order[a_player].bot == False:
+            player_action = await bot.wait_for('message',
+            check=lambda message: message.author.id == turn_order[a_player].userID)
+            if player_action.content.lower() == '1':
+                attack_roll, damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
+        if attack_roll >= turn_order[p_player].armorclass:
+            await ctx.send(f'''
 **{turn_order[a_player].name}** hit **{turn_order[p_player].name}** for {damage_roll}
 {turn_order[p_player].name}'s HP is now {turn_order[p_player].hit_points}
 ''')
-            elif attack_roll < turn_order[p_player].armorclass:
-                await ctx.send(f'''
+        elif attack_roll < turn_order[p_player].armorclass:
+            await ctx.send(f'''
 **{turn_order[a_player].name}** swings and misses **{turn_order[p_player].name}**
 ''')
-            else:
-                print(f'error in attack roll / armor class evaluation dndbot_discord'
-                f'armor class: {turn_order[p_player].armorclass} attack roll: {attack_roll}')
+        else:
+            print(f'error in attack roll / armor class evaluation dndbot_discord'
+            f'armor class: {turn_order[p_player].armorclass} attack roll: {attack_roll}')
         if player_one.hit_points <= 0:
             await ctx.send(f'''
 **{player_one.name}** has fallen in combat

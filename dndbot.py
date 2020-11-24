@@ -103,6 +103,7 @@ class Character():
         # Character.results[0] == wins
         # Character.results[1] == losses
         self.results = [0, 0]
+        self.bot = False
     
     def show_attributes(self):
         print(self.strength)
@@ -395,6 +396,7 @@ class Character():
         self.set_char_race(self.races[random.randint(0, len(self.races) - 1)])
         self.set_char_weapon(self.weapons[random.randint(0, len(self.weapons) - 1)])
         self.name = 'TEMPBOT'
+        self.bot = True
         
 
 '''
