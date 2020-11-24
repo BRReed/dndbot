@@ -84,7 +84,12 @@ class Character():
         self.races = [
             'Dwarf',
             'Elf',
-            'Human',
+            'Human'
+        ]
+        self.weapons = [
+            'Longsword',
+            'Battleaxe',
+            'Warhammer'
         ]
         self.resistances = [
 
@@ -386,10 +391,11 @@ class Character():
             return False
 
     def comp_create_char(self):
-        self.set_char_class(self.classes[random.randint(0, len(self.classes - 1))])
-        self.set_char_race(self.races[random.randint(0, len(self.races - 1))])
+        self.set_char_class(self.classes[random.randint(0, len(self.classes) - 1)])
+        self.set_char_race(self.races[random.randint(0, len(self.races) - 1)])
+        self.set_char_weapon(self.weapons[random.randint(0, len(self.weapons) - 1)])
         self.name = 'TEMPBOT'
-
+        
 
 '''
 Set Up

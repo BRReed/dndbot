@@ -347,7 +347,8 @@ Enter '2' to run
 async def combat_PvNPC(ctx):
     npc = dndbot.Character()
     npc.comp_create_char()
-
+    npc.set_attribute_modifier()
+    print(npc.instance_as_dictionary('555'))
 
 
 
