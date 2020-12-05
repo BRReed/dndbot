@@ -432,23 +432,49 @@ Enter '2' to run
 @bot.command(name='hangman')
 async def hangman(ctx):
     game = hangmanbot.HangMan()
-    wordlist = game.load_words()
-    secret_word = game.choose_word(wordlist)
+    secret_word = game.choose_word(game.wordlist)
     warnings = 3
     guesses = 6
-    letters_guessed = []
+    
     await ctx.send(f'''
 **{ctx.author.name}**: Your secret word is **{len(secret_word)}** letters long!
 {secret_word}
     
-    ''')
+    ''') # sending discord message, channel, author id to channel instead
     while True:
         await ctx.send(f'''
-You have {guesses} left!
-Your available letters are: {game.get_available_letters(letters_guessed)}
+You have {guesses} guesses left!
+Your available letters are: {game.get_available_letters(game.letters_guessed)}
 Enter \'*\' to see all possible matches in the words list
         ''')
-        letter = await bot.wait_for('message')
+        letter = await bot.wait_for('message',
+        check=lambda message: message.author == ctx.author, timeout = 20)
+        if letter.content.lower() == '*':
+            possible_words = game.show_possible_matches(game.get_guessed_word(
+                secret_word, game.letters_guessed), game.letters_guessed)
+            if possible_words > 2000:
+                # split into separate strings, by half, at closest comma
+                # do this in hangmanbot.py and for loop here based on return num
+                # strings split into 2k slices num += 1 
+                pass 
+            else:
+                await ctx.send(f'''
+                {possible_words}
+                ''')
+        elif letter.content.lower() in game.get_available_letters(
+                                                game.letters_guessed):
+            game.letters_guessed.append(letter)
+        else:
+            await ctx.send('''
+Please choose a letter from the list
+            ''')
+            continue
+        await ctx.send(f'''
+{game.letters_guessed}
+        ''')
+
+
+
     # continue here. need to reformat hangman.py as we go
     # to make it act as a class
 

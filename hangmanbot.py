@@ -11,6 +11,10 @@ WORDLIST_FILENAME = "words.txt"
 
 class HangMan():
 
+    def __init__(self):
+        self.load_words()
+        self.letters_guessed = []
+
     def load_words(self):
         """
         Returns a list of valid words. Words are strings of lowercase letters.
@@ -26,7 +30,7 @@ class HangMan():
         # wordlist: list of strings
         wordlist = line.split()
         print("  ", len(wordlist), "words loaded.")
-        return wordlist
+        self.wordlist = wordlist
 
     def choose_word(self, wordlist):
         """
@@ -112,8 +116,8 @@ class HangMan():
         that has already been revealed.
         '''
         wl = []
-        for word in wordlist:
+        for word in self.wordlist:
             if len(word) == len(my_word.replace(' ', '')):
-                if match_with_gaps(my_word, word, letters_guessed) is True:
+                if self.match_with_gaps(my_word, word, letters_guessed) is True:
                     wl.append(word)
         return wl
