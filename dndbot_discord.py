@@ -3,6 +3,7 @@ import asyncio
 from discord.ext import commands
 import dndbot
 import dndbot_token
+import hangmanbot
 
 
 bot = commands.Bot(command_prefix = '.')
@@ -21,7 +22,7 @@ async def shutdown(message):
     else:
         print('unauthorized user ' + str(message.author.id) +
               ' is trying to close the bot')
-
+              
 # available commands in discord
 @bot.command(name='commands')
 async def user_commands(ctx):
@@ -31,11 +32,17 @@ async def user_commands(ctx):
 **.commands** - Get a list of commands
 **.create** - Make a character
 **.wins** - Show the wins and losses of your character
-
+**.roll** - roll a 1 - 1000 die 
 
         """
     )
 
+@bot.command(name='roll')
+async def roll(ctx):
+    current_roll = dndbot.roll_die(1, 1000)
+    await ctx.channel.send(f'**{ctx.author}** rolled **{current_roll}**')
+    if current_roll == 420:
+        await ctx.channel.send(f'OH SHIT!!! **420 BLAZE IT**')
 
 # simple dice game used to test different aspects of the discord api
 @bot.command(name='dicegame')
@@ -422,6 +429,28 @@ Enter '2' to run
             p_player = 0
 
 
+@bot.command(name='hangman')
+async def hangman(ctx):
+    game = hangmanbot.HangMan()
+    wordlist = game.load_words()
+    secret_word = game.choose_word(wordlist)
+    warnings = 3
+    guesses = 6
+    letters_guessed = []
+    await ctx.send(f'''
+**{ctx.author.name}**: Your secret word is **{len(secret_word)}** letters long!
+{secret_word}
+    
+    ''')
+    while True:
+        await ctx.send(f'''
+You have {guesses} left!
+Your available letters are: {game.get_available_letters(letters_guessed)}
+Enter \'*\' to see all possible matches in the words list
+        ''')
+        letter = await bot.wait_for('message')
+    # continue here. need to reformat hangman.py as we go
+    # to make it act as a class
 
 
 
