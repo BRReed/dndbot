@@ -432,37 +432,34 @@ Enter '2' to run
 @bot.command(name='hangman')
 async def hangman(ctx):
     game = hangmanbot.HangMan()
-    secret_word = game.choose_word(game.wordlist)
     warnings = 3
     guesses = 6
     
     await ctx.send(f'''
-**{ctx.author.name}**: Your secret word is **{len(secret_word)}** letters long!
-{secret_word}
-    
-    ''') # sending discord message, channel, author id to channel instead
+**{ctx.author.name}**: 
+Your secret word is **{len(game.secret_word)}** letters long!
+{game.secret_word}
+    ''')
     while True:
         await ctx.send(f'''
 You have {guesses} guesses left!
-Your available letters are: {game.get_available_letters(game.letters_guessed)}
+Your available letters are: {game.get_available_letters()}
 Enter \'*\' to see all possible matches in the words list
         ''')
         letter = await bot.wait_for('message',
         check=lambda message: message.author == ctx.author, timeout = 20)
         if letter.content.lower() == '*':
-            possible_words = game.show_possible_matches(game.get_guessed_word(
-                secret_word, game.letters_guessed), game.letters_guessed)
-            if possible_words > 2000:
+            game.show_possible_matches()
+            if len(game.wl) > 2000:
                 # split into separate strings, by half, at closest comma
                 # do this in hangmanbot.py and for loop here based on return num
                 # strings split into 2k slices num += 1 
                 pass 
             else:
                 await ctx.send(f'''
-                {possible_words}
+                {game.wl}
                 ''')
-        elif letter.content.lower() in game.get_available_letters(
-                                                game.letters_guessed):
+        elif letter.content.lower() in game.get_available_letters():
             game.letters_guessed.append(letter)
         else:
             await ctx.send('''

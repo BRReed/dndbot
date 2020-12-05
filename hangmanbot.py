@@ -13,6 +13,7 @@ class HangMan():
 
     def __init__(self):
         self.load_words()
+        self.choose_word()
         self.letters_guessed = []
 
     def load_words(self):
@@ -32,15 +33,15 @@ class HangMan():
         print("  ", len(wordlist), "words loaded.")
         self.wordlist = wordlist
 
-    def choose_word(self, wordlist):
+    def choose_word(self):
         """
         wordlist (list): list of words (strings)
         
         Returns a word from wordlist at random
         """
-        return random.choice(wordlist)
+        self.secret_word = random.choice(self.wordlist)
 
-    def is_word_guessed(self, secret_word, letters_guessed):
+    def is_word_guessed(self):
         '''
         secret_word: string, the word the user is guessing; assumes all letters are
         lowercase
@@ -50,43 +51,42 @@ class HangMan():
         letters_guessed;
         False otherwise
         '''
-        for l in secret_word:
-            if l not in letters_guessed:
+        for l in self.secret_word:
+            if l not in self.letters_guessed:
                 return False
             else:
                 continue
         return True
 
-    def get_guessed_word(self, secret_word, letters_guessed):
+    def get_guessed_word(self):
         '''
         secret_word: string, the word the user is guessing
         letters_guessed: list (of letters), which letters have been guessed so far
         returns: string, comprised of letters, underscores (_), and spaces that 
         represents which letters in secret_word have been guessed so far.
         '''
-        word_guessed = ''
-        for l in secret_word:
-            if l in letters_guessed:
-                word_guessed += l + ' '
+        self.word_guessed = ''
+        for l in self.secret_word:
+            if l in self.letters_guessed:
+                self.word_guessed += l + ' '
             else:
-                word_guessed += '_ '
-        return word_guessed
+                self.word_guessed += '_ '
 
-    def get_available_letters(self, letters_guessed):
+    def get_available_letters(self):
         '''
         letters_guessed: list (of letters), which letters have been guessed so far
         returns: string (of letters), comprised of letters that represents which 
         letters have not yet been guessed.
         '''
         alphabet_list = list(string.ascii_lowercase)
-        for l in letters_guessed:
+        for l in self.letters_guessed:
             if l in alphabet_list:
                 alphabet_list.pop(alphabet_list.index(l))
             else:
                 continue
         return ', '.join(alphabet_list)
 
-    def match_with_gaps(self, my_word, other_word, letters_guessed):
+    def match_with_gaps(self, other_word):
         '''
         my_word: string with _ characters, current guess of secret word
         other_word: string, regular English word
@@ -97,15 +97,15 @@ class HangMan():
         False otherwise: 
         '''
         i = 0
-        for char1 in my_word.replace(' ', ''):
+        for char1 in self.word_guessed.replace(' ', ''):
             if char1 != other_word[i] and char1 != '_':
                 return False
-            elif char1 == '_' and other_word[i] in letters_guessed:
+            elif char1 == '_' and other_word[i] in self.letters_guessed:
                 return False
             i += 1
         return True
 
-    def show_possible_matches(self, my_word, letters_guessed):
+    def show_possible_matches(self):
         '''
         my_word: string with _ characters, current guess of secret word
         letters_guessed: list, of letters as strings that have been guessed
@@ -115,9 +115,9 @@ class HangMan():
         Therefore, the hidden letter(_ ) cannot be one of the letters in the word
         that has already been revealed.
         '''
-        wl = []
+        self.wl = []
+        self.get_guessed_word()
         for word in self.wordlist:
-            if len(word) == len(my_word.replace(' ', '')):
-                if self.match_with_gaps(my_word, word, letters_guessed) is True:
-                    wl.append(word)
-        return wl
+            if len(word) == len(self.word_guessed.replace(' ', '')):
+                if self.match_with_gaps(word) is True:
+                    self.wl.append(word)
