@@ -121,3 +121,78 @@ class HangMan():
             if len(word) == len(self.word_guessed.replace(' ', '')):
                 if self.match_with_gaps(word) is True:
                     self.wl.append(word)
+    
+    def physical_hangman(self, guesses):
+        '''
+        guesses: integer representing the amount of guesses left
+        returns printable visualization of guesses left :
+        `             _______
+                     |       |
+                     |       0
+                     |      /|\\
+                     |      / \\
+                     |___________`
+        '''
+        if guesses == 0:
+            return '''
+`             _______
+            |       |
+            |       0
+            |      /|\\
+            |      / \\
+            |___________`
+            '''
+        elif guesses == 1:
+            return '''
+`             _______
+            |       |
+            |       0
+            |      /|\\
+            |      / 
+            |___________`
+            '''
+        elif guesses == 2:
+            return '''
+`             _______
+            |       |
+            |       0
+            |      /|\\
+            |      
+            |___________`
+            '''
+        elif guesses == 3:
+            return '''
+`             _______
+            |       |
+            |       0
+            |      /|
+            |
+            |___________`
+            '''
+        elif guesses == 4:
+            return '''
+`             _______
+            |       |
+            |       0
+            |       |
+            |
+            |___________`
+            '''
+        elif guesses == 5:
+            return '''
+`             _______
+            |       |
+            |       0
+            |
+            |
+            |___________`
+            '''
+        elif guesses == 6:
+            return '''
+`             _______
+            |       |
+            |
+            |
+            |
+            |___________`
+            '''

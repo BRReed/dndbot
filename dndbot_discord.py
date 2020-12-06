@@ -448,6 +448,8 @@ async def hangman(ctx):
     guesses = 6
     
     await ctx.send(f'''
+
+
 **{ctx.author.name}**: 
 Your secret word is **{len(game.secret_word)}** letters long!
 {game.secret_word}
@@ -489,6 +491,7 @@ You have **{warnings}** warnings left
                 break
             else:
                 continue
+        await ctx.send(f'''{game.physical_hangman(guesses)}''')
         if guesses == 0:
             await ctx.send(f'''
 Sorry you ran out of guesses. 
