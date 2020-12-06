@@ -447,7 +447,7 @@ Your available letters are: {game.get_available_letters()}
 Enter \'*\' to see all possible matches in the words list
         ''')
         letter = await bot.wait_for('message',
-        check=lambda message: message.author == ctx.author, timeout = 20)
+        check=lambda message: message.author == ctx.author, timeout = 500)
         if letter.content.lower() == '*':
             game.show_possible_matches()
             if len(game.wl) > 2000:
@@ -456,17 +456,17 @@ Enter \'*\' to see all possible matches in the words list
                 # strings split into 2k slices num += 1 
                 pass 
             else:
-                await ctx.send(f'''
+                await ctx.send(f''' non-butt stuff
                 {game.wl}
                 ''')
         elif letter.content.lower() in game.get_available_letters():
-            game.letters_guessed.append(letter)
+            game.letters_guessed.append(letter.content.lower())
         else:
             await ctx.send('''
 Please choose a letter from the list
             ''')
             continue
-        await ctx.send(f'''
+        await ctx.send(f''' butt stuff
 {game.letters_guessed}
         ''')
 
