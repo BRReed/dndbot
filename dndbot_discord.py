@@ -440,8 +440,12 @@ Enter '2' to run
 @bot.command(name='hangman')
 async def hangman(ctx):
     '''
-    Command initiator plays a game of hangman against the computer
-    
+    Command plays a game of hangman against the computer
+    * Player is given 3 warnings which get subtracted if
+      the player guesses anything that is not in the available_letters
+      list
+    * Player is given 6 guesses only subtracted when their guess is not
+      in the secret_word. 
     '''
     game = hangmanbot.HangMan()
     warnings = 3
@@ -467,15 +471,18 @@ Your guessed word is
         check=lambda message: message.author == ctx.author, timeout = 500)
         if letter.content.lower() == '*':
             game.show_possible_matches()
-            try:
+            print(len(game.wl))
+            if len(game.wl) < 75:
                 await ctx.send(f'''
 Possible words are:
 **{game.wl}**
                 ''')
-                # figure out how to actually catch this
-            except commands.CommandInvokeError: 
-                await ctx.send('Sorry, The list of possible words isn\'t ',
-                               'small enough. Please guess more and try again.')
+            else:
+                await ctx.send('''
+**Sorry, The list of possible words isn\'t small enough. 
+Please guess more and try again.**
+                               ''')
+                continue
 
         elif letter.content.lower() in game.get_available_letters():
             game.letters_guessed.append(letter.content.lower())
@@ -488,6 +495,10 @@ Please choose a letter from the list
 You have **{warnings}** warnings left
             ''')
             if warnings == 0:
+                ctx.send(f'''
+You\'ve ran out of warnings
+Your secret word was **{game.secret_word}**
+                ''')
                 break
             else:
                 continue
