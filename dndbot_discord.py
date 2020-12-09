@@ -16,6 +16,8 @@ async def on_ready():
     Prints to console when bot is initialized
     '''
     print('Bot is ready.')
+    activity = discord.Game(name=".commands")
+    await bot.change_presence(status=discord.Status.idle, activity=activity)
 
 @bot.command(name='shutdown')
 async def shutdown(message):
