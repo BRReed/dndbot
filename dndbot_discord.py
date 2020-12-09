@@ -3,6 +3,7 @@ import asyncio
 from discord.ext import commands
 import dndbot
 import dndbot_token
+import dndbot_roll
 import hangmanbot
 
 
@@ -218,6 +219,20 @@ Enter '**2**' to delete **{player_create.name}**
 You can now engage in combat against the computer or another player!
 To do so just enter '**.combat**'
         ''')
+
+@bot.command(name='roll')
+async def roll(ctx):
+    '''
+    Rolls a 1000 sided die
+    '''
+    roll = dndbot.roll_die(1, 1000)
+    if roll == 420:
+        await ctx.channel.send(f'''
+{dndbot_roll.success}
+
+        ''')
+    else:
+        await ctx.channel.send(f'**{ctx.author.name}** rolled **{roll}**')
 
 # combat against the computer or another discord user
 @bot.command(name='combat')
