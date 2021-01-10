@@ -64,18 +64,21 @@ async def dice_game(ctx):
     if choice.content.lower() == '1':
         player = dndbot.roll_die(2, 6)
         computer = dndbot.roll_die(2, 6)
-        await ctx.channel.send("You want to play with the computer")
-        await ctx.channel.send(f"you rolled {player}")
-        await ctx.channel.send(f"computer rolled {computer}")
         if computer > player:
-            await ctx.channel.send("Computer Wins!")
-        elif player > computer:
-            await ctx.channel.send('Player Wins!')
+            result = "Computer Wins!"
+        elif computer < player:
+            result = "Player Wins!"
+        else:
+            result = "Tie!"
+        await ctx.channel.send("You want to play with the computer\n"+
+                              f"you rolled {player}\n"+
+                              f"computer rolled {computer}\n"+
+                              f"{result}")
     elif choice.content.lower() == '2':
         await ctx.channel.send(
-            "You want to play against another player")
-        await ctx.channel.send("If you want to play against"+
-                              f" {ctx.author} type '1'")
+            "You want to play against another player\n"+
+            "If you want to play against"+
+           f" {ctx.author} type '1'")
         try:
             player2 = await bot.wait_for('message',
                 check=lambda message: message.author != ctx.author,
@@ -83,16 +86,20 @@ async def dice_game(ctx):
             if player2.content.lower() == '1':
                 player_dice_total = dndbot.roll_die(2, 6)
                 player2_dice_total = dndbot.roll_die(2, 6)
-                await ctx.channel.send(
-                    f"{ctx.author} vs {player2.author}")
-                await ctx.channel.send(f"{ctx.author}'s total:"+
-                                       f" {player_dice_total}")
-                await ctx.channel.send(f"{player2.author}'s total:"
-                                       f" {player2_dice_total}")
                 if player_dice_total > player2_dice_total:
-                    await ctx.channel.send(f"{ctx.author} wins!")
-                elif player2_dice_total > player_dice_total:
-                    await ctx.channel.send(f"{player2.author} wins!")
+                    result = f'{ctx.author} Wins!'
+                elif player_dice_total < player2_dice_total:
+                    result = f'{player2.author} Wins!'
+                else:
+                    result = 'Tie!'
+                await ctx.channel.send(
+                    f"{ctx.author} vs {player2.author}\n"+
+                    f"{ctx.author}'s total:"+
+                    f" {player_dice_total}\n"+
+                    f"{player2.author}'s total:"+
+                    f" {player2_dice_total}\n"+
+                    f"{result}")
+
 
         except asyncio.TimeoutError:
             await ctx.channel.send('''
