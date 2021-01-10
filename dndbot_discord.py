@@ -53,7 +53,7 @@ async def user_commands(ctx):
 @bot.command(name='dicegame')
 async def dice_game(ctx):
     '''
-    Plays a game of higher/lower with 2 6 sided dice 
+    Plays one round of higher/lower with 2 6 sided dice 
     Initiator can choose to play against either comp or another user
     '''
     
@@ -126,6 +126,9 @@ Enter '**.create**' to start creating a character.
 # create a new character for dnd combat tied to user's discord ID
 @bot.command(name='create')
 async def create_character(ctx):
+    '''
+    Create a character for dnd combat based on user input
+    '''
     await ctx.send(f'''
 Enter '**1**' for **Barbarian**
 Enter '**2**' for **Fighter**
@@ -235,13 +238,9 @@ async def roll(ctx):
     Rolls a 1000 sided die
     '''
     roll = dndbot.roll_die(1, 1000)
-    if roll == 420:
-        await ctx.channel.send(f'''
-{dndbot_roll.success}
+    result = dndbot_roll(roll)
+        await ctx.channel.send(result)
 
-        ''')
-    else:
-        await ctx.channel.send(f'**{ctx.author.name}** rolled **{roll}**')
 
 # combat against the computer or another discord user
 @bot.command(name='combat')
