@@ -308,14 +308,15 @@ Enter '**.create**' to start creating a character.
 no one wanted to fight them.
     ''')
     player_two.hit_points = (player_two.hit_die + player_two.constitution_mod)
-    initiative, player_one_initiative, player_two_initiative = dndbot.combat_initiative(ctx.author.id, opponent.author.id)
-    if initiative is True:
+    init, player_one_init, player_two_init = dndbot.combat_init(ctx.author.id, 
+                                                            opponent.author.id)
+    if init is True:
         turn_order = [player_one, player_two]
-    elif initiative is False:
+    elif init is False:
         turn_order = [player_two, player_one]
     await ctx.send(f'''
-**{player_one.name}** initiative roll: **{player_one_initiative}**
-**{player_two.name}** initiative roll: **{player_two_initiative}**
+**{player_one.name}** initiative roll: **{player_one_init}**
+**{player_two.name}** initiative roll: **{player_two_init}**
 ''')
 
     a_player = 0
@@ -328,7 +329,7 @@ Enter '2' to run
 ''')
 
         player_action = await bot.wait_for('message',
-            check=lambda message: message.author.id == turn_order[a_player].userID)
+         check=lambda message: message.author.id == turn_order[a_player].userID)
         if player_action.content.lower() == '1':
             attack_roll, damage_roll = dndbot.combat(turn_order[a_player], 
                                                      turn_order[p_player])
@@ -386,14 +387,15 @@ async def combat_PvNPC(ctx, player_one):
     npc.set_attribute_modifier()
     npc.save_char_info('757334164914700379')
     print(npc.instance_as_dictionary('757334164914700379'))
-    initiative, player_one_initiative, npc_initiative = dndbot.combat_initiative(ctx.author.id, '757334164914700379')
-    if initiative is True:
+    init, player_one_init, npc_init = dndbot.combat_initiative(ctx.author.id, 
+                                                         '757334164914700379')
+    if init is True:
         turn_order = [player_one, npc]
-    elif initiative is False:
+    elif init is False:
         turn_order = [npc, player_one]
     await ctx.send(f'''
-**{player_one.name}** initiative roll: **{player_one_initiative}**
-**{npc.name}** initiative roll: **{npc_initiative}**
+**{player_one.name}** initiative roll: **{player_one_init}**
+**{npc.name}** initiative roll: **{npc_init}**
 ''')
     a_player = 0
     p_player = 1
