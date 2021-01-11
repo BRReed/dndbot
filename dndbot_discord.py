@@ -308,9 +308,7 @@ Enter '**.create**' to start creating a character.
 no one wanted to fight them.
     ''')
     player_two.hit_points = (player_two.hit_die + player_two.constitution_mod)
-    initiative, player_one_initiative, 
-    player_two_initiative = dndbot.combat_initiative(ctx.author.id, 
-                                                     opponent.author.id)
+    initiative, player_one_initiative, player_two_initiative = dndbot.combat_initiative(ctx.author.id, opponent.author.id)
     if initiative is True:
         turn_order = [player_one, player_two]
     elif initiative is False:
@@ -388,10 +386,7 @@ async def combat_PvNPC(ctx, player_one):
     npc.set_attribute_modifier()
     npc.save_char_info('757334164914700379')
     print(npc.instance_as_dictionary('757334164914700379'))
-    initiative, 
-    player_one_initiative, 
-    npc_initiative = dndbot.combat_initiative(ctx.author.id, 
-                                              '757334164914700379')
+    initiative, player_one_initiative, npc_initiative = dndbot.combat_initiative(ctx.author.id, '757334164914700379')
     if initiative is True:
         turn_order = [player_one, npc]
     elif initiative is False:
