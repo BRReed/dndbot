@@ -4,7 +4,6 @@ from discord.ext import commands
 import dndbot
 import dndbot_token
 import dndbot_roll
-import hangmanbot
 
 
 bot = commands.Bot(command_prefix = '.')
@@ -32,7 +31,7 @@ async def shutdown(message):
         print('unauthorized user ' + str(message.author.id) +
               ' is trying to close the bot')
               
-# available commands in discord
+
 @bot.command(name='commands')
 async def user_commands(ctx):
     '''
@@ -49,11 +48,11 @@ async def user_commands(ctx):
         """
     )
 
-# simple dice game used to test different aspects of the discord api
+
 @bot.command(name='dicegame')
 async def dice_game(ctx):
     '''
-    Plays a game of higher/lower with 2 6 sided dice 
+    Plays one round of higher/lower with 2 6 sided dice 
     Initiator can choose to play against either comp or another user
     '''
     
@@ -64,18 +63,21 @@ async def dice_game(ctx):
     if choice.content.lower() == '1':
         player = dndbot.roll_die(2, 6)
         computer = dndbot.roll_die(2, 6)
-        await ctx.channel.send("You want to play with the computer")
-        await ctx.channel.send(f"you rolled {player}")
-        await ctx.channel.send(f"computer rolled {computer}")
         if computer > player:
-            await ctx.channel.send("Computer Wins!")
-        elif player > computer:
-            await ctx.channel.send('Player Wins!')
+            result = "Computer Wins!"
+        elif computer < player:
+            result = "Player Wins!"
+        else:
+            result = "Tie!"
+        await ctx.channel.send("You want to play with the computer\n"+
+                              f"you rolled {player}\n"+
+                              f"computer rolled {computer}\n"+
+                              f"{result}")
     elif choice.content.lower() == '2':
         await ctx.channel.send(
-            "You want to play against another player")
-        await ctx.channel.send("If you want to play against"+
-                              f" {ctx.author} type '1'")
+            "You want to play against another player\n"+
+            "If you want to play against"+
+           f" {ctx.author} type '1'")
         try:
             player2 = await bot.wait_for('message',
                 check=lambda message: message.author != ctx.author,
@@ -83,16 +85,20 @@ async def dice_game(ctx):
             if player2.content.lower() == '1':
                 player_dice_total = dndbot.roll_die(2, 6)
                 player2_dice_total = dndbot.roll_die(2, 6)
-                await ctx.channel.send(
-                    f"{ctx.author} vs {player2.author}")
-                await ctx.channel.send(f"{ctx.author}'s total:"+
-                                       f" {player_dice_total}")
-                await ctx.channel.send(f"{player2.author}'s total:"
-                                       f" {player2_dice_total}")
                 if player_dice_total > player2_dice_total:
-                    await ctx.channel.send(f"{ctx.author} wins!")
-                elif player2_dice_total > player_dice_total:
-                    await ctx.channel.send(f"{player2.author} wins!")
+                    result = f'{ctx.author} Wins!'
+                elif player_dice_total < player2_dice_total:
+                    result = f'{player2.author} Wins!'
+                else:
+                    result = 'Tie!'
+                await ctx.channel.send(
+                    f"{ctx.author} vs {player2.author}\n"+
+                    f"{ctx.author}'s total:"+
+                    f" {player_dice_total}\n"+
+                    f"{player2.author}'s total:"+
+                    f" {player2_dice_total}\n"+
+                    f"{result}")
+
 
         except asyncio.TimeoutError:
             await ctx.channel.send('''
@@ -116,9 +122,11 @@ Enter '**.create**' to start creating a character.
         ''')
         return
 
-# create a new character for dnd combat tied to user's discord ID
 @bot.command(name='create')
 async def create_character(ctx):
+    '''
+    Create a character for dnd combat based on user input
+    '''
     await ctx.send(f'''
 Enter '**1**' for **Barbarian**
 Enter '**2**' for **Fighter**
@@ -228,25 +236,22 @@ async def roll(ctx):
     Rolls a 1000 sided die
     '''
     roll = dndbot.roll_die(1, 1000)
-    if roll == 420:
-        await ctx.channel.send(f'''
-{dndbot_roll.success}
+    result = dndbot_roll(roll)
+    await ctx.channel.send(result)
 
-        ''')
-    else:
-        await ctx.channel.send(f'**{ctx.author.name}** rolled **{roll}**')
 
-# combat against the computer or another discord user
 @bot.command(name='combat')
 async def combat(ctx):
+    """
+    Play a round of dnd combat against computer or another user
+    """
     player = dndbot.Character()
     if player.check_char_exists(ctx.author.id) == False:
-        await ctx.send(f'''
+        await ctx.send('''
 Before you can enter combat you must create a character.
 Enter '**.create**' to start creating a character.
         ''')
         return
-
     player.load_char_info(ctx.author.id)
     await ctx.send(f'''
 **{ctx.author.name}'s** character **{player.name}'s** attributes are:
@@ -259,24 +264,24 @@ Charisma: **{player.charisma}**
 Enter '**1**' to play against the **computer**
 Enter '**2**' to play against a **friend**
         ''')
-
+    player.hit_points = (player.hit_die + player.constitution_mod)
+    print(player.hit_points)
     try:
         play_versus = await bot.wait_for('message',
             check=lambda message: message.author == ctx.author,
             timeout = 20)
         if play_versus.content.lower() == '1':
-            await ctx.send('play vs comp placeholder message')
             await combat_PvNPC(ctx, player)
         elif play_versus.content.lower() == '2':
-            await ctx.send('play vs friend placeholder message')
             await combat_PvP(ctx, player)
-        else:
-            await ctx.send('you must enter 1 or 2 placeholder message')
     except asyncio.TimeoutError:
         await ctx.send('Sorry, you took too long to respond')
 
-# Player vs Player combat
+
 async def combat_PvP(ctx, player_one):
+    """
+    Combat vs another user
+    """
     await ctx.send(f'''
 Enter '**1**' to fight against **{ctx.author.name}'s**
  **{player_one.char_class}** **{player_one.char_race}**
@@ -299,18 +304,19 @@ Enter '**.create**' to start creating a character.
         ''')
     except asyncio.TimeoutError:
         await ctx.send(f'''
-Sorry, **{player_one.name}** is too scary, 
+**{player_one.name}** is too scary, 
 no one wanted to fight them.
     ''')
-
-    initiative, player_one_initiative, player_two_initiative = dndbot.combat_initiative(ctx.author.id, opponent.author.id)
-    if initiative is True:
+    player_two.hit_points = (player_two.hit_die + player_two.constitution_mod)
+    init, player_one_init, player_two_init = dndbot.combat_init(ctx.author.id, 
+                                                            opponent.author.id)
+    if init is True:
         turn_order = [player_one, player_two]
-    elif initiative is False:
+    elif init is False:
         turn_order = [player_two, player_one]
     await ctx.send(f'''
-**{player_one.name}** initiative roll: **{player_one_initiative}**
-**{player_two.name}** initiative roll: **{player_two_initiative}**
+**{player_one.name}** initiative roll: **{player_one_init}**
+**{player_two.name}** initiative roll: **{player_two_init}**
 ''')
 
     a_player = 0
@@ -323,21 +329,23 @@ Enter '2' to run
 ''')
 
         player_action = await bot.wait_for('message',
-            check=lambda message: message.author.id == turn_order[a_player].userID)
+        check=lambda message: message.author.id == turn_order[a_player].userID)
         if player_action.content.lower() == '1':
-            attack_roll, damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
+            attack_roll, damage_roll = dndbot.combat(turn_order[a_player], 
+                                                     turn_order[p_player])
             if attack_roll >= turn_order[p_player].armorclass:
-                await ctx.send(f'''
-**{turn_order[a_player].name}** hit **{turn_order[p_player].name}** for {damage_roll}
-{turn_order[p_player].name}'s HP is now {turn_order[p_player].hit_points}
-''')
+                await ctx.send(f"**{turn_order[a_player].name}** hit "+
+                        f"**{turn_order[p_player].name}** for {damage_roll}",
+                        f"{turn_order[p_player].name}'s HP is now "+
+                        f"{turn_order[p_player].hit_points}")
             elif attack_roll < turn_order[p_player].armorclass:
-                await ctx.send(f'''
-**{turn_order[a_player].name}** swings and misses **{turn_order[p_player].name}**
-''')
+                await ctx.send(f"**{turn_order[a_player].name}** swings and "+
+                               f"misses **{turn_order[p_player].name}**")
             else:
-                print(f'error in attack roll / armor class evaluation dndbot_discord'
-                f'armor class: {turn_order[p_player].armorclass} attack roll: {attack_roll}')
+                print('error in attack roll / armor class evaluation '+
+                      'dndbot_discord'+
+                      f'armor class: {turn_order[p_player].armorclass}'+
+                      f'attack roll: {attack_roll}')
         if player_one.hit_points <= 0:
             await ctx.send(f'''
 **{player_one.name}** has fallen in combat
@@ -370,27 +378,26 @@ Enter '2' to run
             p_player = 0
 
 
-
-
-
-# Player vs NPC combat
 async def combat_PvNPC(ctx, player_one):
+    """
+    Combat vs computer
+    """
     npc = dndbot.Character()
     npc.comp_create_char()
     npc.set_attribute_modifier()
     npc.save_char_info('757334164914700379')
     print(npc.instance_as_dictionary('757334164914700379'))
-    initiative, player_one_initiative, npc_initiative = dndbot.combat_initiative(ctx.author.id, '757334164914700379')
-    ####
-    if initiative is True:
+    init, player_one_init, npc_init = (
+        dndbot.combat_init(ctx.author.id, '757334164914700379')
+    )
+    if init is True:
         turn_order = [player_one, npc]
-    elif initiative is False:
+    elif init is False:
         turn_order = [npc, player_one]
     await ctx.send(f'''
-**{player_one.name}** initiative roll: **{player_one_initiative}**
-**{npc.name}** initiative roll: **{npc_initiative}**
+**{player_one.name}** initiative roll: **{player_one_init}**
+**{npc.name}** initiative roll: **{npc_init}**
 ''')
-
     a_player = 0
     p_player = 1
     while True:
@@ -400,30 +407,33 @@ Enter '1' to attack **{turn_order[p_player].name}**
 Enter '2' to run
 ''')
         if turn_order[a_player].bot == True:
-            print('GOT PASSED BOT TRUE CHECK')
             await asyncio.sleep(5)
-            print('5 second wait')
-            attack_roll, damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
+            attack_roll, damage_roll = dndbot.combat(turn_order[a_player], 
+                                                     turn_order[p_player])
             await ctx.send(f'{attack_roll}, {damage_roll}')
         else:
             pass
         if turn_order[a_player].bot == False:
-            player_action = await bot.wait_for('message',
-            check=lambda message: message.author.id == turn_order[a_player].userID)
+            player_action = await bot.wait_for(
+                'message', check=lambda message: message.author.id == (
+                turn_order[a_player].userID)
+            )
             if player_action.content.lower() == '1':
-                attack_roll, damage_roll = dndbot.combat(turn_order[a_player], turn_order[p_player])
+                attack_roll, damage_roll = dndbot.combat(turn_order[a_player], 
+                                                         turn_order[p_player])
         if attack_roll >= turn_order[p_player].armorclass:
-            await ctx.send(f'''
-**{turn_order[a_player].name}** hit **{turn_order[p_player].name}** for {damage_roll}
-{turn_order[p_player].name}'s HP is now {turn_order[p_player].hit_points}
-''')
+            await ctx.send(f"**{turn_order[a_player].name}** hit "+
+                           f"**{turn_order[p_player].name}** for {damage_roll}",
+                           f"{turn_order[p_player].name}'s HP is now "+
+                           f"{turn_order[p_player].hit_points}")
         elif attack_roll < turn_order[p_player].armorclass:
-            await ctx.send(f'''
-**{turn_order[a_player].name}** swings and misses **{turn_order[p_player].name}**
-''')
+            await ctx.send(f'**{turn_order[a_player].name}** swings and '+
+                           f'misses **{turn_order[p_player].name}**')
         else:
-            print(f'error in attack roll / armor class evaluation dndbot_discord'
-            f'armor class: {turn_order[p_player].armorclass} attack roll: {attack_roll}')
+            print('error in attack roll / armor class evaluation '+
+                  'dndbot_discord '+
+                 f'armor class: {turn_order[p_player].armorclass} '+ 
+                 f'attack roll: {attack_roll}')
         if player_one.hit_points <= 0:
             await ctx.send(f'''
 **{player_one.name}** has fallen in combat

@@ -13,23 +13,23 @@ def roll_die(dice, sides):
 
     return total
 
-def combat_initiative(player_one, player_two):
+def combat_init(player_one, player_two):
     try:
-        player_one_initiative = roll_die(1, 20)
-        player_two_initiative = roll_die(1, 20)
-        player_one_initiative != player_two_initiative
+        player_one_init = roll_die(1, 20)
+        player_two_init = roll_die(1, 20)
+        player_one_init != player_two_init
     finally:
-        if player_one_initiative > player_two_initiative:
+        if player_one_init > player_two_init:
             p1 = True
-            return p1, player_one_initiative, player_two_initiative
-        elif player_one_initiative < player_two_initiative:
+            return p1, player_one_init, player_two_init
+        elif player_one_init < player_two_init:
             p1 = False
-            return p1, player_one_initiative, player_two_initiative
+            return p1, player_one_init, player_two_init
         else:
-            print(f'problem in combat_initiative '+
+            print(f'problem in combat_init '+
                   f'p1 = {player_one}; p2 = {player_two} '+
-                  f'p1 roll = {player_one_initiative}; '+
-                  f'p2 roll = {player_two_initiative}')
+                  f'p1 roll = {player_one_init}; '+
+                  f'p2 roll = {player_two_init}')
 
 # takes the current active player instance, and the other instances in
 # turn order and allows active player to perform actions to themselves
@@ -43,7 +43,6 @@ def combat(active_player, passive_player):
     else:
         damage_roll = 0
         return attack_roll, damage_roll
-
 
 
 
