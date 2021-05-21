@@ -48,7 +48,6 @@ def combat(active_player, passive_player):
 
 
 
-
 class Character():
 
     def __init__(self, default=0):

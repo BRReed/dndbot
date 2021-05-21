@@ -4,7 +4,6 @@ from discord.ext import commands
 import dndbot
 import dndbot_token
 import dndbot_roll
-import hangmanbot
 
 
 bot = commands.Bot(command_prefix = '.')
@@ -266,6 +265,7 @@ Enter '**1**' to play against the **computer**
 Enter '**2**' to play against a **friend**
         ''')
     player.hit_points = (player.hit_die + player.constitution_mod)
+    print(player.hit_points)
     try:
         play_versus = await bot.wait_for('message',
             check=lambda message: message.author == ctx.author,
@@ -329,7 +329,7 @@ Enter '2' to run
 ''')
 
         player_action = await bot.wait_for('message',
-         check=lambda message: message.author.id == turn_order[a_player].userID)
+        check=lambda message: message.author.id == turn_order[a_player].userID)
         if player_action.content.lower() == '1':
             attack_roll, damage_roll = dndbot.combat(turn_order[a_player], 
                                                      turn_order[p_player])
@@ -387,8 +387,9 @@ async def combat_PvNPC(ctx, player_one):
     npc.set_attribute_modifier()
     npc.save_char_info('757334164914700379')
     print(npc.instance_as_dictionary('757334164914700379'))
-    init, player_one_init, npc_init = dndbot.combat_initiative(ctx.author.id, 
-                                                         '757334164914700379')
+    init, player_one_init, npc_init = (
+        dndbot.combat_init(ctx.author.id, '757334164914700379')
+    )
     if init is True:
         turn_order = [player_one, npc]
     elif init is False:
@@ -413,8 +414,10 @@ Enter '2' to run
         else:
             pass
         if turn_order[a_player].bot == False:
-            player_action = await bot.wait_for('message',
-            check=lambda message: message.author.id == turn_order[a_player].userID)
+            player_action = await bot.wait_for(
+                'message', check=lambda message: message.author.id == (
+                turn_order[a_player].userID)
+            )
             if player_action.content.lower() == '1':
                 attack_roll, damage_roll = dndbot.combat(turn_order[a_player], 
                                                          turn_order[p_player])
